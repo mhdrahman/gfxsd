@@ -61,20 +61,23 @@ async function generateXml() {
     var requestUri = window.location.href + "Home/GenerateXmlFromSchema";
     var schema = document.getElementById("schemaTextArea").value;
 
-    // TODO deal with any potential errors from request
-    var response = await fetch(
-        requestUri,
+    var spinner = document.getElementById("spinner");
+    spinner.removeAttribute('hidden');
+
+    //// TODO deal with any potential errors from request
+    fetch(requestUri,
         {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ Content: schema }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            spinner.setAttribute('hidden', '');
+            document.getElementById("outputCSharpTextArea").value = data.cSharp;
+            document.getElementById("outputXmlTextArea").value = data.xml;
+            openOutputXml();
         });
-
-    var json = await response.json();
-
-    document.getElementById("outputCSharpTextArea").value = json.cSharp;
-    document.getElementById("outputXmlTextArea").value = json.xml;
-    openOutputXml();
 }
 
 function onLoad() {

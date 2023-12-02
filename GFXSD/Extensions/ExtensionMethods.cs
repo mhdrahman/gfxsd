@@ -14,9 +14,18 @@ namespace GFXSD.Extensions
                 return string.Empty;
             }
 
-            var xmlserializer = new XmlSerializer(typeof(T));
+            var xmlserializer = new XmlSerializer(value.GetType());
+            var xmlSettings = new XmlWriterSettings
+            {
+                Indent = true,
+                IndentChars = "  ",
+                NewLineChars = "\r\n",
+                NewLineHandling = NewLineHandling.Replace,
+                OmitXmlDeclaration = true,
+            };
+
             var stringWriter = new StringWriter();
-            using (var writer = XmlWriter.Create(stringWriter))
+            using (var writer = XmlWriter.Create(stringWriter, xmlSettings))
             {
                 xmlserializer.Serialize(writer, value);
                 return stringWriter.ToString();

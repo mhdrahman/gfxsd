@@ -101,7 +101,7 @@ namespace GFXSD.Controllers
             var sucessResult = new XmlGenerationResult
             {
                 CSharp = generatedCSharp,
-                //Xml = instance.Serialize(),
+                Xml = instance.Serialize(),
             };
 
             return Ok(sucessResult);

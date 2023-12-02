@@ -1,4 +1,5 @@
 ﻿using GFXSD.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Diagnostics;
@@ -42,12 +43,23 @@ namespace GFXSD.Controllers
 
             if (!string.IsNullOrEmpty(err))
             {
-                return Json($"ERROR: {err}");
+                var result = new XmlGenerationResult
+                {
+                    Error = err,
+                };
+
+                return StatusCode(StatusCodes.Status500InternalServerError, err);
             }
 
             var generatedCSharp = System.IO.File.ReadAllText(Path.Combine(directory, $"{fileName}.cs"));
 
-            return Json(generatedCSharp);
+            var sucessResult = new XmlGenerationResult
+            {
+                CSharp = generatedCSharp,
+                Xml = null,
+            };
+
+            return Ok(sucessResult);
         }
     }
 }

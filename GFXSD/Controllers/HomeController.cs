@@ -1,22 +1,19 @@
-﻿using GFXSD.Models;
+﻿using AutoFixture;
+using AutoFixture.Kernel;
+using GFXSD.Extensions;
+using GFXSD.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.Xml.XMLGen;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.Extensions.FileSystemGlobbing.Internal;
 using System.Text.RegularExpressions;
-using GFXSD.Extensions;
-using Newtonsoft.Json;
-using AutoFixture;
-using AutoFixture.Kernel;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -31,7 +28,7 @@ namespace GFXSD.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> GenerateXmlFromSchema([FromBody] Schema schema)
+        public  ActionResult GenerateXmlFromSchema([FromBody] Schema schema)
         {
             // TODO move all the logic into XmlGenerationService
             const string directory = "C:/ProgramData/GFXSD";
@@ -107,6 +104,35 @@ namespace GFXSD.Controllers
             };
 
             return Ok(sucessResult);
+        }
+
+        [HttpPost]
+        public ActionResult GenerateXmlFromSchemaV2([FromBody] Schema schema)
+        {
+            // TODO move all the logic into XmlGenerationService
+            const string directory = "C:/ProgramData/GFXSD";
+
+            var fileName = Guid.NewGuid().ToString();
+            var inputFilePath = Path.Combine(directory, $"{fileName}.xsd");
+            Directory.CreateDirectory(directory);
+            System.IO.File.WriteAllText(inputFilePath, schema.Content);
+
+            var outputFilePath = Path.Combine(directory, $"{fileName}.xml");
+            using (var textWriter = new XmlTextWriter(outputFilePath, null))
+            {
+                textWriter.Formatting = Formatting.Indented;
+                var xmlQualifiedName = new XmlQualifiedName("Root", "http://tempuri.org");
+
+                var generator = new XmlSampleGenerator(inputFilePath, null)
+                {
+                    MaxThreshold = 3,
+                    ListLength = 3,
+                };
+
+                generator.WriteXml(textWriter);
+            }
+
+            return Ok(new XmlGenerationResult { Xml = System.IO.File.ReadAllText(outputFilePath) });
         }
 
         [HttpPost]

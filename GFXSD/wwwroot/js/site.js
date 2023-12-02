@@ -61,6 +61,8 @@ async function generateXml() {
     var requestUri = window.location.href + "Home/GenerateXmlFromSchema";
     var schema = document.getElementById("schemaTextArea").value;
 
+    var spinnerContainer = document.getElementById("spinnerContainer");
+    spinnerContainer.style.opacity = 0.2;
     var spinner = document.getElementById("spinner");
     spinner.removeAttribute('hidden');
 
@@ -74,6 +76,7 @@ async function generateXml() {
         .then(response => response.json())
         .then(data => {
             spinner.setAttribute('hidden', '');
+            spinnerContainer.style.opacity = 0;
             document.getElementById("outputCSharpTextArea").value = data.cSharp;
             document.getElementById("outputXmlTextArea").value = data.xml;
             openOutputXml();

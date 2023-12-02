@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.8.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\XmlSampleGenerator\XmlSampleGenerator.csproj" />
+  </ItemGroup>
+
 </Project>

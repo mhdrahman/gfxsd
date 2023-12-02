@@ -12,14 +12,14 @@
             <textarea id="schemaTextArea" placeholder="Enter the XML Schema here" spellcheck="false"></textarea>
         </div>
         <div id="OutputCSharp" class="tabcontent">
-            <textarea id="outputCSharpTextArea" placeholder="Generated C# will go here" spellcheck="false"></textarea>
+            <textarea id="outputCSharpTextArea" placeholder="Generated C# will go here" spellcheck="false" readonly></textarea>
         </div>
         <div id="OutputXml" class="tabcontent">
-            <textarea id="outputXmlTextArea" placeholder="Generated XML will go here" spellcheck="false"></textarea>
+            <textarea id="outputXmlTextArea" placeholder="Generated XML will go here" spellcheck="false" readonly></textarea>
         </div>
     </div>
     <div class="controlscontainer">
-        <p>Tools</p>
         <button id="generateXmlButton" onclick="generateXml()" class="controlbtn">Generate XML</button>
+        <button id="removeFlexibleDataButton" onclick="cleanXml()" class="controlbtn">Clean XML</button>
     </div>
 </div>

@@ -17,6 +17,8 @@ using GFXSD.Extensions;
 using Newtonsoft.Json;
 using AutoFixture;
 using AutoFixture.Kernel;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace GFXSD.Controllers
 {
@@ -105,6 +107,15 @@ namespace GFXSD.Controllers
             };
 
             return Ok(sucessResult);
+        }
+
+        [HttpPost]
+        public ActionResult RemoveNodes([FromBody] RemoveNodesCommand command)
+        {
+            var xElement = XElement.Parse(command.Xml);
+            xElement.Descendants().Where(_ => _.Name == command.NodeName).Remove();
+
+            return Ok(new RemoveNodesCommand { Xml = xElement.ToString() });
         }
     }
 }

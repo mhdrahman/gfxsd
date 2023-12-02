@@ -1,4 +1,6 @@
-﻿function openSchema() {
+﻿const { removeData } = require("jquery");
+
+function openSchema() {
     resetTabs();
     var schemaContainer = document.getElementById("Schema");
     schemaContainer.style.display = "block";
@@ -66,7 +68,7 @@ async function generateXml() {
     var spinner = document.getElementById("spinner");
     spinner.removeAttribute('hidden');
 
-    //// TODO deal with any potential errors from request
+    //// TODO deal with any potential errors from request and swap to same async pattern as below
     fetch(requestUri,
         {
             method: "POST",
@@ -81,6 +83,38 @@ async function generateXml() {
             document.getElementById("outputXmlTextArea").value = data.xml;
             openOutputXml();
         });
+}
+
+async function cleanXml()
+{
+    await removeNodes("FlexibleData");
+    await removeNodes("DynamicData");
+    await removeNodes("ListOwner");
+    await removeNodes("ListNo");
+    await removeNodes("Description");
+}
+
+async function removeNodes(nodeName) {
+    var requestUri = window.location.href + "Home/RemoveNodes";
+    var xml = document.getElementById("outputXmlTextArea").value;
+
+    var spinnerContainer = document.getElementById("spinnerContainer");
+    spinnerContainer.style.opacity = 0.2;
+    var spinner = document.getElementById("spinner");
+    spinner.removeAttribute('hidden');
+
+    //// TODO deal with any potential errors from request
+    var response = await fetch(requestUri, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ NodeName: nodeName, Xml: xml }),
+    });
+
+    var json = await response.json();
+    spinner.setAttribute('hidden', '');
+    spinnerContainer.style.opacity = 0;
+    document.getElementById("outputXmlTextArea").value = json.xml;
+    openOutputXml();
 }
 
 function onLoad() {

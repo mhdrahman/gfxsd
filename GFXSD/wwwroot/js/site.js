@@ -73,7 +73,8 @@ async function generateXml() {
     var json = await response.json();
 
     document.getElementById("outputCSharpTextArea").value = json.cSharp;
-    openOutputCSharp();
+    document.getElementById("outputXmlTextArea").value = json.xml;
+    openOutputXml();
 }
 
 function onLoad() {

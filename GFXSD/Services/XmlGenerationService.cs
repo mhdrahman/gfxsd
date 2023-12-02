@@ -41,12 +41,14 @@ namespace GFXSD.Services
 
         private XmlGenerationResult GenerateUsingXmlSampleGenerator(string schema)
         {
+            // Save the schema to file
             var fileName = Guid.NewGuid().ToString();
             var inputFilePath = Path.Combine(DataDirectory, $"{fileName}.xsd");
-            var outputFilePath = Path.Combine(DataDirectory, $"{fileName}.xml");
-
             File.WriteAllText(inputFilePath, schema);
 
+
+            // Use the XmlSampleGenerator from Microsoft to generate the dummy XML on file
+            var outputFilePath = Path.Combine(DataDirectory, $"{fileName}.xml");
             using (var textWriter = new XmlTextWriter(outputFilePath, null))
             {
                 textWriter.Formatting = System.Xml.Formatting.Indented;
@@ -70,10 +72,12 @@ namespace GFXSD.Services
 
         public XmlGenerationResult GenerateUsingCodeGenerator(string schema)
         {
+            // Save the schema to file
             var fileName = Guid.NewGuid().ToString();
             var inputFilePath = Path.Combine(DataDirectory, $"{fileName}.xsd");
             File.WriteAllText(inputFilePath, schema);
 
+            // Use the xsd.exe to generate the C# class from the schema
             var procStartInfo = new ProcessStartInfo
             {
                 FileName = XsdToolPath,
@@ -116,11 +120,12 @@ namespace GFXSD.Services
                 throw new InvalidOperationException($"An error occured while compiling the generated C#: { JsonConvert.SerializeObject(compilationResult.Diagnostics)}");
             }
 
+            // Load the assembly and create an instance of the generated class
             var matchingTypeName = Regex.Match(generatedCSharp, @"public\s+partial\s+class\s+(\w+)|public\s+class\s+(\w+)");
-
             var loadedAssembly = Assembly.LoadFile(outputDllPath);
             var instance = Activator.CreateInstance(loadedAssembly.GetType(matchingTypeName.Groups[1].Value));
 
+            // Populate the instance with dummy data using AutoFixture
             var fixture = new Fixture();
             new AutoPropertiesCommand().Execute(instance, new SpecimenContext(fixture));
 

@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using GFXSD.Models;
 using System.IO;
+using System.Linq;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace GFXSD.Extensions
@@ -24,12 +26,23 @@ namespace GFXSD.Extensions
                 OmitXmlDeclaration = true,
             };
 
-            var stringWriter = new StringWriter();
-            using (var writer = XmlWriter.Create(stringWriter, xmlSettings))
+            using var stringWriter = new StringWriter();
+            using var writer = XmlWriter.Create(stringWriter, xmlSettings);
+            xmlserializer.Serialize(writer, value);
+
+            return stringWriter.ToString();
+
+        }
+
+        public static CommandResult RemoveNodes(this string xml, string nodeName)
+        {
+            var xElement = XElement.Parse(xml);
+            xElement.Descendants().Where(_ => _.Name == nodeName).Remove();
+
+            return new CommandResult
             {
-                xmlserializer.Serialize(writer, value);
-                return stringWriter.ToString();
-            }
+                Result = xElement.ToString(),
+            };
         }
     }
 }

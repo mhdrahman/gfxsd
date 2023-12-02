@@ -113,7 +113,7 @@ async function removeNodes(nodeName) {
     var json = await response.json();
     spinner.setAttribute('hidden', '');
     spinnerContainer.style.opacity = 0;
-    document.getElementById("outputXmlTextArea").value = json.xml;
+    document.getElementById("outputXmlTextArea").value = json.result;
     openOutputXml();
 }
 

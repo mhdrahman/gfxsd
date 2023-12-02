@@ -1,3 +1,4 @@
+using GFXSD.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +12,8 @@ namespace GFXSD
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews()
+            builder.Services.AddSingleton<XmlGenerationService>(_ => new XmlGenerationService())
+                            .AddControllersWithViews()
                             .AddNewtonsoftJson();
 
             var app = builder.Build();

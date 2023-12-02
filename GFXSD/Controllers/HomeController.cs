@@ -36,8 +36,8 @@ namespace GFXSD.Controllers
             };
 
             using var proc = Process.Start(procStartInfo);
-            var output = proc.StandardOutput.ReadToEnd(); // TODO output as progress
-            var err = proc.StandardError.ReadToEnd(); // TODO deal with errors
+            var output = proc.StandardOutput.ReadToEnd();
+            var err = proc.StandardError.ReadToEnd();
             proc.WaitForExit();
 
             if (!string.IsNullOrEmpty(err))
@@ -47,7 +47,7 @@ namespace GFXSD.Controllers
 
             var generatedCSharp = System.IO.File.ReadAllText(Path.Combine(directory, $"{fileName}.cs"));
 
-            return Json($"{output}\r\n{err}\r\n{generatedCSharp}");
+            return Json(generatedCSharp);
         }
     }
 }

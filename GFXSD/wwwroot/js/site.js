@@ -89,9 +89,6 @@ async function cleanXml()
 {
     await removeNodes("FlexibleData");
     await removeNodes("DynamicData");
-    await removeNodes("ListOwner");
-    await removeNodes("ListNo");
-    await removeNodes("Description");
 }
 
 async function removeNodes(nodeName) {

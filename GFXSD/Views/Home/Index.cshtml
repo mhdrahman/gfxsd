@@ -4,9 +4,9 @@
 <div class="maincontainer">
     <div class="tabscontainer">
         <div class="tablinks">
-            <button id="openSchemaButton" class="tablink" onclick="openSchema()">Schema</button>
-            <button id="openOutputCSharpButton" class="tablink" onclick="openOutputCSharp()">Output C#</button>
-            <button id="openOutputXmlButton" class="tablink" onclick="openOutputXml()">Output XML</button>
+            <button id="SchemaButton" class="tablink" onclick="openTab('Schema')">Schema</button>
+            <button id="OutputCSharpButton" class="tablink" onclick="openTab('OutputCSharp')">Output C#</button>
+            <button id="OutputXmlButton" class="tablink" onclick="openTab('OutputXml')">Output XML</button>
         </div>
         <div id="Schema" class="tabcontent">
             <textarea id="schemaTextArea" placeholder="Enter the XML Schema here" spellcheck="false"></textarea>
@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="controlscontainer">
-        <button id="generateXmlButton" onclick="generateXml()" class="controlbtn">Generate XML</button>
-        <button id="removeFlexibleDataButton" onclick="cleanXml()" class="controlbtn">Clean XML</button>
+        <button onclick="generateXml()" class="controlbtn">Generate XML</button>
+        <button onclick="cleanXml()" class="controlbtn">Clean XML</button>
     </div>
 </div>

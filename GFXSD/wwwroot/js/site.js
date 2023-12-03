@@ -1,117 +1,74 @@
-﻿function openSchema() {
-    resetTabs();
-    var schemaContainer = document.getElementById("Schema");
-    schemaContainer.style.display = "block";
+﻿const tabs = [
+    "Schema",
+    "OutputCSharp",
+    "OutputXml",
+];
 
-    var outputContainer = document.getElementById("OutputCSharp");
-    outputContainer.style.display = "none";
+function onLoad() {
+    openTab("Schema");
+}
 
-    var outputContainer = document.getElementById("OutputXml");
-    outputContainer.style.display = "none";
-
-    var button = document.getElementById("openSchemaButton");
-    if (!button.classList.contains("active")) {
-        button.classList.add("active");
+function openTab(tabNameToOpen) {
+    for (var i = 0; i < tabs.length; i++) {
+        var tabName = tabs[i];
+        var tabContainer = document.getElementById(tabName);
+        var buttonName = tabName + "Button";
+        var button = document.getElementById(buttonName);
+        if (tabName == tabNameToOpen) {
+            tabContainer.style.display = "block";
+            button.classList.add("active");
+        } else {
+            tabContainer.style.display = "none";
+            button.classList.remove("active");
+        }
     }
 }
 
-function openOutputCSharp(e) {
-    resetTabs();
-    var schemaContainer = document.getElementById("Schema");
-    schemaContainer.style.display = "none";
-
-    var outputContainer = document.getElementById("OutputCSharp");
-    outputContainer.style.display = "block";
-
-    var outputContainer = document.getElementById("OutputXml");
-    outputContainer.style.display = "none";
-
-    var button = document.getElementById("openOutputCSharpButton");
-    if (!button.classList.contains("active")) {
-        button.classList.add("active");
-    }
+function showSpinner() {
+    var spinnerContainer = document.getElementById("spinnerContainer");
+    spinnerContainer.style.opacity = 0.2;
+    var spinner = document.getElementById("spinner");
+    spinner.removeAttribute('hidden');
 }
 
-function openOutputXml(e) {
-    resetTabs();
-    var schemaContainer = document.getElementById("Schema");
-    schemaContainer.style.display = "none";
-
-    var outputContainer = document.getElementById("OutputCSharp");
-    outputContainer.style.display = "none";
-
-    var outputContainer = document.getElementById("OutputXml");
-    outputContainer.style.display = "block";
-
-    var button = document.getElementById("openOutputXmlButton");
-    if (!button.classList.contains("active")) {
-        button.classList.add("active");
-    }
-}
-
-function resetTabs() {
-    var allTabs = document.getElementsByClassName("tablink");
-    for (i = 0; i < allTabs.length; i++) {
-        allTabs[i].classList.remove("active");
-    }
+function hideSpinner() {
+    var spinnerContainer = document.getElementById("spinnerContainer");
+    spinnerContainer.style.opacity = 0;
+    var spinner = document.getElementById("spinner");
+    spinner.setAttribute('hidden', '');
 }
 
 async function generateXml() {
-    // TODO get the host uri as the implementation can fail if not serving the default page
-    var requestUri = window.location.href + "Home/GenerateXmlFromSchema";
+    showSpinner();
     var schema = document.getElementById("schemaTextArea").value;
-
-    var spinnerContainer = document.getElementById("spinnerContainer");
-    spinnerContainer.style.opacity = 0.2;
-    var spinner = document.getElementById("spinner");
-    spinner.removeAttribute('hidden');
+    var requestUri = window.location.protocol + "//" + window.location.host + "/Home/GenerateXmlFromSchema";
+    var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Content: schema }) };
 
     //// TODO deal with any potential errors from request and swap to same async pattern as below
-    fetch(requestUri,
-        {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ Content: schema }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            spinner.setAttribute('hidden', '');
-            spinnerContainer.style.opacity = 0;
-            document.getElementById("outputCSharpTextArea").value = data.cSharp;
-            document.getElementById("outputXmlTextArea").value = data.xml;
-            openOutputXml();
-        });
+    var response = await fetch(requestUri, request);
+    var json = await response.json();
+
+    document.getElementById("outputCSharpTextArea").value = json.cSharp;
+    document.getElementById("outputXmlTextArea").value = json.xml;
+    hideSpinner();
+    openTab("OutputXml");
 }
 
-async function cleanXml()
-{
+async function cleanXml() {
+    showSpinner();
     await removeNodes("FlexibleData");
     await removeNodes("DynamicData");
+    hideSpinner()
 }
 
 async function removeNodes(nodeName) {
-    var requestUri = window.location.href + "Home/RemoveNodes";
     var xml = document.getElementById("outputXmlTextArea").value;
-
-    var spinnerContainer = document.getElementById("spinnerContainer");
-    spinnerContainer.style.opacity = 0.2;
-    var spinner = document.getElementById("spinner");
-    spinner.removeAttribute('hidden');
+    var requestUri = window.location.protocol + "//" + window.location.host + "/Home/RemoveNodes";
+    var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ NodeName: nodeName, Xml: xml }) };
 
     //// TODO deal with any potential errors from request
-    var response = await fetch(requestUri, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ NodeName: nodeName, Xml: xml }),
-    });
-
+    var response = await fetch(requestUri, request);
     var json = await response.json();
-    spinner.setAttribute('hidden', '');
-    spinnerContainer.style.opacity = 0;
-    document.getElementById("outputXmlTextArea").value = json.result;
-    openOutputXml();
-}
 
-function onLoad() {
-    openSchema();
+    document.getElementById("outputXmlTextArea").value = json.result;
 }

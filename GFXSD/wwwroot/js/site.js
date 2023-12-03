@@ -1,6 +1,4 @@
-﻿const { removeData } = require("jquery");
-
-function openSchema() {
+﻿function openSchema() {
     resetTabs();
     var schemaContainer = document.getElementById("Schema");
     schemaContainer.style.display = "block";

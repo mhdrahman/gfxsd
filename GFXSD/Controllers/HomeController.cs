@@ -25,7 +25,7 @@ namespace GFXSD.Controllers
         [HttpPost]
         public  ActionResult GenerateXmlFromSchema([FromBody] Schema schema)
         {
-            return Ok(_xmlGenerationService.GenerateXmlFromSchema(schema.Content, XmlGenerationMode.AutoFixture));
+            return Ok(_xmlGenerationService.GenerateXmlFromSchema(schema.Content, XmlGenerationMode.Microsoft));
         }
 
         [HttpPost]

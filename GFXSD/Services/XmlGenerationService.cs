@@ -19,7 +19,7 @@ namespace GFXSD.Services
     public class XmlGenerationService
     {
         private const string DataDirectory = @"C:\ProgramData\GFXSD";
-        private const string XsdToolPath = @"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools\xsd.exe";
+        private const string XsdToolPath = @"External\xsd.exe";
 
         public XmlGenerationService()
         {

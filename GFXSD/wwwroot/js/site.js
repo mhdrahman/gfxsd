@@ -24,10 +24,14 @@ function openTab(tabNameToOpen) {
     }
 }
 
-async function generateXml() {
+async function generateXml(useCodeGen) {
     showSpinner();
     var schema = document.getElementById("schemaTextArea").value;
     var requestUri = window.location.protocol + "//" + window.location.host + "/Home/GenerateXmlFromSchema";
+    if (useCodeGen) {
+        requestUri += "?useCodeGen=true";
+    }
+
     var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Content: schema }) };
 
     try {

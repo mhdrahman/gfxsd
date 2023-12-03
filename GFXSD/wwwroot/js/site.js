@@ -38,7 +38,7 @@ async function generateXml() {
         hideSpinner();
         openTab("OutputXml");
     } catch (ex) {
-        handleError();
+        handleError(ex);
     }
 
 }
@@ -60,7 +60,7 @@ async function removeNodes(nodeName) {
         var json = await response.json();
         document.getElementById("outputXmlTextArea").value = json.result;
     } catch (ex) {
-        handleError();
+        handleError(ex);
     }
 }
 
@@ -78,6 +78,8 @@ function hideSpinner() {
     spinner.setAttribute('hidden', '');
 }
 
-function handleError() {
+function handleError(ex) {
+    // Probably could show a pretty little modal
+    alert("Error occured: " + ex);
     hideSpinner();
 }

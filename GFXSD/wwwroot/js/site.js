@@ -24,34 +24,23 @@ function openTab(tabNameToOpen) {
     }
 }
 
-function showSpinner() {
-    var spinnerContainer = document.getElementById("spinnerContainer");
-    spinnerContainer.style.opacity = 0.2;
-    var spinner = document.getElementById("spinner");
-    spinner.removeAttribute('hidden');
-}
-
-function hideSpinner() {
-    var spinnerContainer = document.getElementById("spinnerContainer");
-    spinnerContainer.style.opacity = 0;
-    var spinner = document.getElementById("spinner");
-    spinner.setAttribute('hidden', '');
-}
-
 async function generateXml() {
     showSpinner();
     var schema = document.getElementById("schemaTextArea").value;
     var requestUri = window.location.protocol + "//" + window.location.host + "/Home/GenerateXmlFromSchema";
     var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Content: schema }) };
 
-    //// TODO deal with any potential errors from request and swap to same async pattern as below
-    var response = await fetch(requestUri, request);
-    var json = await response.json();
+    try {
+        var response = await fetch(requestUri, request);
+        var json = await response.json();
+        document.getElementById("outputCSharpTextArea").value = json.cSharp;
+        document.getElementById("outputXmlTextArea").value = json.xml;
+        hideSpinner();
+        openTab("OutputXml");
+    } catch (ex) {
+        handleError();
+    }
 
-    document.getElementById("outputCSharpTextArea").value = json.cSharp;
-    document.getElementById("outputXmlTextArea").value = json.xml;
-    hideSpinner();
-    openTab("OutputXml");
 }
 
 async function cleanXml() {
@@ -66,9 +55,29 @@ async function removeNodes(nodeName) {
     var requestUri = window.location.protocol + "//" + window.location.host + "/Home/RemoveNodes";
     var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ NodeName: nodeName, Xml: xml }) };
 
-    //// TODO deal with any potential errors from request
-    var response = await fetch(requestUri, request);
-    var json = await response.json();
+    try {
+        var response = await fetch(requestUri, request);
+        var json = await response.json();
+        document.getElementById("outputXmlTextArea").value = json.result;
+    } catch (ex) {
+        handleError();
+    }
+}
 
-    document.getElementById("outputXmlTextArea").value = json.result;
+function showSpinner() {
+    var spinnerContainer = document.getElementById("spinnerContainer");
+    spinnerContainer.style.opacity = 0.2;
+    var spinner = document.getElementById("spinner");
+    spinner.removeAttribute('hidden');
+}
+
+function hideSpinner() {
+    var spinnerContainer = document.getElementById("spinnerContainer");
+    spinnerContainer.style.opacity = 0;
+    var spinner = document.getElementById("spinner");
+    spinner.setAttribute('hidden', '');
+}
+
+function handleError() {
+    hideSpinner();
 }

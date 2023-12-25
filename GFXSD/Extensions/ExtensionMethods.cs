@@ -38,12 +38,19 @@ namespace GFXSD.Extensions
         {
             var xElement = XElement.Parse(xml);
             xElement.Descendants().Where(_ => _.Name == nodeName).Remove();
-            xElement.DescendantNodes().OfType<XComment>().Remove();
 
             return new CommandResult
             {
                 Result = xElement.ToString(),
             };
+        }
+
+        public static string RemoveComments(this string xml)
+        {
+            var xElement = XElement.Parse(xml);
+            xElement.DescendantNodes().OfType<XComment>().Remove();
+
+            return xElement.ToString();
         }
     }
 }

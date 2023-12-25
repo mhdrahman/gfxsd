@@ -13,13 +13,16 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace GFXSD.Services
 {
+    // TODO these three main methods could probably do with being put into three seperate classes
+
     /// <summary>
     /// A class capable of generating sample XML from a given XSD (xml schema).
     /// </summary>
-    public class XmlGenerationService
+    public partial class XmlGenerationService
     {
         private const string DataDirectory = @"C:\ProgramData\GFXSD\Data";
         private const string XsdToolPath = @"External\xsd.exe";
@@ -42,28 +45,27 @@ namespace GFXSD.Services
         /// <returns>The sample XML for the specified <paramref name="schema"/>.</returns>
         public XmlGenerationResult GenerateXmlFromSchema(string schema, XmlGenerationMode xmlGenerationMode)
         {
-            switch (xmlGenerationMode)
+            return xmlGenerationMode switch
             {
-                case XmlGenerationMode.Microsoft:
-                    return GenerateUsingXmlSampleGenerator(schema);
-
-                case XmlGenerationMode.XmlBeans:
-                    return GenerateUsingXmlBeans(schema);
-
-                default:
-                case XmlGenerationMode.AutoFixture:
-                    return GenerateUsingCodeGenerator(schema);
-            }
+                XmlGenerationMode.XmlBeans => GenerateUsingXmlBeans(schema),
+                XmlGenerationMode.Microsoft => GenerateUsingXmlSampleGenerator(schema),
+                _ => GenerateUsingCodeGeneration(schema),
+            };
         }
 
         // TODO find the root element name and pass it in
-        // TODO populate non-mandatory fields
         private XmlGenerationResult GenerateUsingXmlBeans(string schema)
         {
             // Save the schema to file
+            var schemaXDoc = XDocument.Parse(schema);
+            schemaXDoc.Descendants()
+                      .SelectMany(descendant => descendant.Attributes().Where(attribute => attribute.Name.LocalName.ToLower() == "minoccurs" || attribute.Name.LocalName.ToLower() == "maxoccurs"))
+                      .ToList()
+                      .ForEach(UpdateMinAndMaxOccurs);
+
             var fileName = Guid.NewGuid().ToString();
             var inputFilePath = Path.Combine(DataDirectory, $"{fileName}.xsd");
-            File.WriteAllText(inputFilePath, schema);
+            schemaXDoc.Save(inputFilePath);
 
             // Use the xsd2inst to generate sample XML from the schema
             var procStartInfo = new ProcessStartInfo
@@ -78,10 +80,10 @@ namespace GFXSD.Services
             var output = proc.StandardOutput.ReadToEnd();
             var error = proc.StandardError.ReadToEnd();
             proc.WaitForExit();
-            
+
             return new XmlGenerationResult
             {
-                Xml = output,
+                Xml = output.RemoveComments(),
                 CSharp = null,
             };
         }
@@ -116,7 +118,7 @@ namespace GFXSD.Services
             };
         }
 
-        public XmlGenerationResult GenerateUsingCodeGenerator(string schema)
+        public XmlGenerationResult GenerateUsingCodeGeneration(string schema)
         {
             // Save the schema to file
             var fileName = Guid.NewGuid().ToString();
@@ -152,11 +154,10 @@ namespace GFXSD.Services
                                                     .Where(assembly => !assembly.IsDynamic && !string.IsNullOrEmpty(assembly.Location))
                                                     .Select(assembly => MetadataReference.CreateFromFile(assembly.Location));
 
-            var compilation = CSharpCompilation
-                .Create(fileName)
-                .WithOptions(compilationOptions)
-                .AddReferences(references)
-                .AddSyntaxTrees(syntaxTree);
+            var compilation = CSharpCompilation .Create(fileName)
+                                                .WithOptions(compilationOptions)
+                                                .AddReferences(references)
+                                                .AddSyntaxTrees(syntaxTree);
 
             var outputDllPath = Path.Combine(DataDirectory, $"{fileName}.dll");
             var compilationResult = compilation.Emit(outputDllPath);
@@ -182,11 +183,17 @@ namespace GFXSD.Services
             };
         }
 
-        public enum XmlGenerationMode
+        private static void UpdateMinAndMaxOccurs(XAttribute attribute)
         {
-            Microsoft,
-            AutoFixture,
-            XmlBeans,
+            if (attribute.Name.LocalName.ToLower() == "minoccurs")
+            {
+                attribute.Value = "1";
+            }
+
+            if (attribute.Name.LocalName.ToLower() == "maxoccurs" && int.Parse(attribute.Value) > 1)
+            {
+                attribute.Parent.Attributes().First(_ => _.Name.LocalName.ToLower() == "minoccurs").Value = "3";
+            }
         }
     }
 }

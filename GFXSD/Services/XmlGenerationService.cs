@@ -16,16 +16,29 @@ using System.Xml;
 
 namespace GFXSD.Services
 {
+    /// <summary>
+    /// A class capable of generating sample XML from a given XSD (xml schema).
+    /// </summary>
     public class XmlGenerationService
     {
         private const string DataDirectory = @"C:\ProgramData\GFXSD";
         private const string XsdToolPath = @"External\xsd.exe";
 
+        /// <summary>
+        /// Initialises a new instance of <see cref="XmlGenerationService"./>
+        /// </summary>
         public XmlGenerationService()
         {
             Directory.CreateDirectory(DataDirectory);
         }
 
+        /// <summary>
+        /// Generates sample XML from the given <paramref name="schema"/> using the method specified
+        /// in <paramref name="xmlGenerationMode"/>.
+        /// </summary>
+        /// <param name="schema">The schema for which the sample XML should be generated.</param>
+        /// <param name="xmlGenerationMode">The method by which the sample XML should be generated.</param>
+        /// <returns>The sample XML for the specified <paramref name="schema"/>.</returns>
         public XmlGenerationResult GenerateXmlFromSchema(string schema, XmlGenerationMode xmlGenerationMode)
         {
             switch (xmlGenerationMode)
@@ -45,7 +58,6 @@ namespace GFXSD.Services
             var fileName = Guid.NewGuid().ToString();
             var inputFilePath = Path.Combine(DataDirectory, $"{fileName}.xsd");
             File.WriteAllText(inputFilePath, schema);
-
 
             // Use the XmlSampleGenerator from Microsoft to generate the dummy XML on file
             var outputFilePath = Path.Combine(DataDirectory, $"{fileName}.xml");
@@ -140,6 +152,7 @@ namespace GFXSD.Services
         {
             Microsoft,
             AutoFixture,
+            XmlBeans,
         }
     }
 }

@@ -21,8 +21,9 @@ namespace GFXSD.Services
     /// </summary>
     public class XmlGenerationService
     {
-        private const string DataDirectory = @"C:\ProgramData\GFXSD";
+        private const string DataDirectory = @"C:\ProgramData\GFXSD\Data";
         private const string XsdToolPath = @"External\xsd.exe";
+        private const string Xsd2InstToolPath = @"C:\ProgramData\GFXSD\xmlbeans-5.2.0\bin\xsd2inst.cmd";
 
         /// <summary>
         /// Initialises a new instance of <see cref="XmlGenerationService"./>
@@ -46,10 +47,43 @@ namespace GFXSD.Services
                 case XmlGenerationMode.Microsoft:
                     return GenerateUsingXmlSampleGenerator(schema);
 
+                case XmlGenerationMode.XmlBeans:
+                    return GenerateUsingXmlBeans(schema);
+
                 default:
                 case XmlGenerationMode.AutoFixture:
                     return GenerateUsingCodeGenerator(schema);
             }
+        }
+
+        // TODO find the root element name and pass it in
+        // TODO populate non-mandatory fields
+        private XmlGenerationResult GenerateUsingXmlBeans(string schema)
+        {
+            // Save the schema to file
+            var fileName = Guid.NewGuid().ToString();
+            var inputFilePath = Path.Combine(DataDirectory, $"{fileName}.xsd");
+            File.WriteAllText(inputFilePath, schema);
+
+            // Use the xsd2inst to generate sample XML from the schema
+            var procStartInfo = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/C {Xsd2InstToolPath} {inputFilePath} -name MiniFleetNBRq",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+            };
+
+            using var proc = Process.Start(procStartInfo);
+            var output = proc.StandardOutput.ReadToEnd();
+            var error = proc.StandardError.ReadToEnd();
+            proc.WaitForExit();
+            
+            return new XmlGenerationResult
+            {
+                Xml = output,
+                CSharp = null,
+            };
         }
 
         private XmlGenerationResult GenerateUsingXmlSampleGenerator(string schema)

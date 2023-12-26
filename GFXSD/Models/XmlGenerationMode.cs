@@ -1,4 +1,4 @@
-﻿namespace GFXSD.Services
+﻿namespace GFXSD.Models
 {
     public enum XmlGenerationMode
     {

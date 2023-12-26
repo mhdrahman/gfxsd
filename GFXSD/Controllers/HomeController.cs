@@ -10,9 +10,9 @@ namespace GFXSD.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly XmlGenerationService _xmlGenerationService;
+        private readonly IXmlGenerationService _xmlGenerationService;
 
-        public HomeController(XmlGenerationService xmlGenerationService)
+        public HomeController(IXmlGenerationService xmlGenerationService)
             => _xmlGenerationService = xmlGenerationService;
 
         [HttpGet]
@@ -20,11 +20,11 @@ namespace GFXSD.Controllers
             => View();
 
         [HttpPost]
-        public ActionResult GenerateXmlFromSchema([FromBody] Schema schema, [FromQuery] XmlGenerationMode xmlGenerationMode)
+        public ActionResult GenerateXmlFromSchema([FromBody] Schema schema)
         {
             try
             {
-                return Ok(_xmlGenerationService.GenerateXmlFromSchema(schema.Content, xmlGenerationMode));
+                return Ok(_xmlGenerationService.Generate(schema.Content));
             }
             catch (Exception e)
             {

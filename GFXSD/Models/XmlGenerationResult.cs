@@ -5,5 +5,7 @@
         public string CSharp { get; set; }
 
         public string Xml { get; set; }
+
+        public string Error { get; set; }
     }
 }

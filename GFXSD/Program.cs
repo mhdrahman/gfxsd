@@ -12,7 +12,7 @@ namespace GFXSD
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddSingleton(_ => new XmlGenerationService())
+            builder.Services.AddSingleton<IXmlGenerationService>(_ => new XmlBeansGeneratorService())
                             .AddControllersWithViews()
                             .AddNewtonsoftJson();
 

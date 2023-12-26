@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace GFXSD.Extensions
 {
-    public static class ExtensionMethods
+    public static class Extensions
     {
         public static string Serialize<T>(this T value)
         {
@@ -58,6 +58,23 @@ namespace GFXSD.Extensions
             catch (Exception)
             {
                 return xml;
+            }
+        }
+
+        public static void UpdateMinAndMaxOccurs(XAttribute attribute)
+        {
+            if (attribute.Name.LocalName.ToLower() == "minoccurs")
+            {
+                attribute.Value = "1";
+            }
+
+            if (attribute.Name.LocalName.ToLower() == "maxoccurs" && int.TryParse(attribute.Value, out var max) && max > 1)
+            {
+                var minAttribute = attribute.Parent.Attributes().FirstOrDefault(_ => _.Name.LocalName.ToLower() == "minoccurs");
+                if (minAttribute != null)
+                {
+                    minAttribute.Value = "3";
+                }
             }
         }
     }

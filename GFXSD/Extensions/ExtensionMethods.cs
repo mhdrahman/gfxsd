@@ -1,4 +1,5 @@
 ﻿using GFXSD.Models;
+using System;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -47,10 +48,17 @@ namespace GFXSD.Extensions
 
         public static string RemoveComments(this string xml)
         {
-            var xElement = XElement.Parse(xml);
-            xElement.DescendantNodes().OfType<XComment>().Remove();
+            try
+            {
+                var xElement = XElement.Parse(xml);
+                xElement.DescendantNodes().OfType<XComment>().Remove();
 
-            return xElement.ToString();
+                return xElement.ToString();
+            }
+            catch (Exception)
+            {
+                return xml;
+            }
         }
     }
 }

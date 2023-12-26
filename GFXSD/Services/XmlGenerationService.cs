@@ -100,7 +100,7 @@ namespace GFXSD.Services
             }
 
             using var proc = Process.Start(procStartInfo);
-            var output = proc.StandardOutput.ReadToEnd();
+            var output = proc.StandardOutput.ReadToEnd().Replace("XMLBEANS_LIB=/home/xmlbeans/xmlbeans-5.2.0/bin/../lib", string.Empty);
             var error = proc.StandardError.ReadToEnd();
             proc.WaitForExit();
 

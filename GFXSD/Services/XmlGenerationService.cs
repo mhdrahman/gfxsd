@@ -33,8 +33,7 @@ namespace GFXSD.Services
         /// </summary>
         public XmlGenerationService()
         {
-            // TODO: REVERT THIS
-            // Directory.CreateDirectory(DataDirectory);
+            Directory.CreateDirectory(DataDirectory);
         }
 
         /// <summary>

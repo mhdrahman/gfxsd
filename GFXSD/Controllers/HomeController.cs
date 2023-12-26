@@ -23,11 +23,9 @@ namespace GFXSD.Controllers
         }
 
         [HttpPost]
-        public ActionResult GenerateXmlFromSchema([FromBody] Schema schema, [FromQuery] bool useCodeGen = false)
+        public ActionResult GenerateXmlFromSchema([FromBody] Schema schema, [FromQuery] XmlGenerationMode xmlGenerationMode)
         {
-            // TODO: REVERT THIS
-            return Ok("{\"xml\": \"Hello, World\"}");
-            return Ok(_xmlGenerationService.GenerateXmlFromSchema(schema.Content, useCodeGen ? XmlGenerationMode.AutoFixture : XmlGenerationMode.XmlBeans));
+            return Ok(_xmlGenerationService.GenerateXmlFromSchema(schema.Content, xmlGenerationMode));
         }
 
         [HttpPost]

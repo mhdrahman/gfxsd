@@ -29,7 +29,7 @@ async function generateXml(useCodeGen) {
     var schema = document.getElementById("schemaTextArea").value;
     var requestUri = window.location.protocol + "//" + window.location.host + "/Home/GenerateXmlFromSchema";
     if (useCodeGen) {
-        requestUri += "?useCodeGen=true";
+        requestUri += "?xmlGenerationMode=1";
     }
 
     var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Content: schema }) };

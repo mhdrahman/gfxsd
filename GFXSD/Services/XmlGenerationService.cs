@@ -24,7 +24,7 @@ namespace GFXSD.Services
     /// </summary>
     public partial class XmlGenerationService
     {
-        private const string DataDirectory = @"C:\ProgramData\GFXSD\Data";
+        private string DataDirectory;
         private const string XsdToolPath = @"External\xsd.exe";
         private const string Xsd2InstToolPath = @"C:\ProgramData\GFXSD\xmlbeans-5.2.0\bin\xsd2inst.cmd";
 
@@ -33,6 +33,10 @@ namespace GFXSD.Services
         /// </summary>
         public XmlGenerationService()
         {
+            DataDirectory = Environment.OSVersion.Platform == PlatformID.Unix
+                ? Path.Combine(Environment.GetEnvironmentVariable("HOME"), "opt", "GFXSD")
+                : "C:/ProgramData/GFXSD";
+
             Directory.CreateDirectory(DataDirectory);
         }
 
@@ -47,9 +51,10 @@ namespace GFXSD.Services
         {
             return xmlGenerationMode switch
             {
-                XmlGenerationMode.XmlBeans => GenerateUsingXmlBeans(schema),
                 XmlGenerationMode.Microsoft => GenerateUsingXmlSampleGenerator(schema),
-                _ => GenerateUsingCodeGeneration(schema),
+                XmlGenerationMode.AutoFixture => GenerateUsingCodeGeneration(schema),
+                XmlGenerationMode.XmlBeans => GenerateUsingXmlBeans(schema),
+                _ => GenerateUsingXmlBeans(schema),
             };
         }
 

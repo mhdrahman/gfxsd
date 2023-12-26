@@ -82,8 +82,8 @@ namespace GFXSD.Services
             {
                 procStartInfo = new ProcessStartInfo
                 {
-                    FileName = "cmd.exe",
-                    Arguments = $"/C {Xsd2InstToolPath} {inputFilePath} -name MiniFleetNBRq",
+                    FileName = "/bin/bash",
+                    Arguments = $"xsd2inst {inputFilePath} -name MiniFleetNBRq",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                 };
@@ -92,8 +92,8 @@ namespace GFXSD.Services
             {
                 procStartInfo = new ProcessStartInfo
                 {
-                    FileName = "/bin/bash",
-                    Arguments = $"xsd2inst {inputFilePath} -name MiniFleetNBRq",
+                    FileName = "cmd.exe",
+                    Arguments = $"/C {Xsd2InstToolPath} {inputFilePath} -name MiniFleetNBRq",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                 };

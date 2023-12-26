@@ -62,7 +62,6 @@ namespace GFXSD.Services
             };
         }
 
-        // TODO find the root element name and pass it in
         private XmlGenerationResult GenerateUsingXmlBeans(string schema)
         {
             // Save the schema to file
@@ -76,6 +75,11 @@ namespace GFXSD.Services
             var inputFilePath = Path.Combine(DataDirectory, $"{fileName}.xsd");
             schemaXDoc.Save(inputFilePath);
 
+            var name = schemaXDoc.Root
+                                 .Elements()
+                                 .FirstOrDefault(_ => _.Name.LocalName.ToLower().Contains("element"))
+                                 .Attribute("name").Value;
+
             // Use the xsd2inst to generate sample XML from the schema
             ProcessStartInfo procStartInfo;
             if (IsLinux)
@@ -83,7 +87,7 @@ namespace GFXSD.Services
                 procStartInfo = new ProcessStartInfo
                 {
                     FileName = "/bin/bash",
-                    Arguments = $"/home/xmlbeans/xmlbeans-5.2.0/bin/xsd2inst {inputFilePath} -name MiniFleetNBRq",
+                    Arguments = $"/home/xmlbeans/xmlbeans-5.2.0/bin/xsd2inst {inputFilePath} -name {name}",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                 };
@@ -93,7 +97,7 @@ namespace GFXSD.Services
                 procStartInfo = new ProcessStartInfo
                 {
                     FileName = "cmd.exe",
-                    Arguments = $"/C {Xsd2InstToolPath} {inputFilePath} -name MiniFleetNBRq",
+                    Arguments = $"/C {Xsd2InstToolPath} {inputFilePath} -name {name}",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                 };
@@ -213,7 +217,7 @@ namespace GFXSD.Services
                 attribute.Value = "1";
             }
 
-            if (attribute.Name.LocalName.ToLower() == "maxoccurs" && int.Parse(attribute.Value) > 1)
+            if (attribute.Name.LocalName.ToLower() == "maxoccurs" && int.TryParse(attribute.Value, out var max) && max > 1)
             {
                 attribute.Parent.Attributes().First(_ => _.Name.LocalName.ToLower() == "minoccurs").Value = "3";
             }

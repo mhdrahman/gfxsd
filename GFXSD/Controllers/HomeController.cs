@@ -26,7 +26,7 @@ namespace GFXSD.Controllers
         public ActionResult GenerateXmlFromSchema([FromBody] Schema schema, [FromQuery] bool useCodeGen = false)
         {
             // TODO: REVERT THIS
-            return Ok("Hello, World");
+            return Ok("{\"xml\": \"Hello, World\"}");
             return Ok(_xmlGenerationService.GenerateXmlFromSchema(schema.Content, useCodeGen ? XmlGenerationMode.AutoFixture : XmlGenerationMode.XmlBeans));
         }
 

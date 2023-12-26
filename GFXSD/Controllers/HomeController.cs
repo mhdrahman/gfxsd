@@ -3,6 +3,8 @@ using GFXSD.Models;
 using GFXSD.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
+using Newtonsoft.Json;
+using System;
 
 namespace GFXSD.Controllers
 {
@@ -19,7 +21,16 @@ namespace GFXSD.Controllers
 
         [HttpPost]
         public ActionResult GenerateXmlFromSchema([FromBody] Schema schema, [FromQuery] XmlGenerationMode xmlGenerationMode)
-            => Ok(_xmlGenerationService.GenerateXmlFromSchema(schema.Content, xmlGenerationMode));
+        {
+            try
+            {
+                return Ok(_xmlGenerationService.GenerateXmlFromSchema(schema.Content, xmlGenerationMode));
+            }
+            catch (Exception e)
+            {
+                return Ok(new XmlGenerationResult { Xml = JsonConvert.SerializeObject(e) });
+            }
+        }
 
         [HttpPost]
         public ActionResult RemoveNodes([FromBody] RemoveNodesCommand command)

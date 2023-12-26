@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace GFXSD.Extensions
 {
-    public static class Extensions
+    public static class XmlUtils
     {
         public static string Serialize<T>(this T value)
         {

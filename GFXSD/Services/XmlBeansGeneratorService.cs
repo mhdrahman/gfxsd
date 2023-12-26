@@ -17,7 +17,7 @@ namespace GFXSD.Services
             schemaXDoc.Descendants()
                       .SelectMany(descendant => descendant.Attributes().Where(attribute => attribute.Name.LocalName.ToLower() == "minoccurs" || attribute.Name.LocalName.ToLower() == "maxoccurs"))
                       .ToList()
-                      .ForEach(Extensions.Extensions.UpdateMinAndMaxOccurs);
+                      .ForEach(Extensions.XmlUtils.UpdateMinAndMaxOccurs);
 
             var fileName = Guid.NewGuid().ToString();
             var inputFilePath = Path.Combine(Configuration.DataDirectory, $"{fileName}.xsd");

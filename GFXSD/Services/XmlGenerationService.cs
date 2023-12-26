@@ -77,13 +77,14 @@ namespace GFXSD.Services
             schemaXDoc.Save(inputFilePath);
 
             // Use the xsd2inst to generate sample XML from the schema
+            // TODO 
             ProcessStartInfo procStartInfo;
             if (IsLinux)
             {
                 procStartInfo = new ProcessStartInfo
                 {
                     FileName = "/bin/bash",
-                    Arguments = $"xsd2inst {inputFilePath} -name MiniFleetNBRq",
+                    Arguments = $"/home/xmlbeans/xmlbeans-5.2.0/bin/xsd2inst {inputFilePath} -name MiniFleetNBRq",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                 };

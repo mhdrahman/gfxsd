@@ -77,7 +77,6 @@ namespace GFXSD.Services
             schemaXDoc.Save(inputFilePath);
 
             // Use the xsd2inst to generate sample XML from the schema
-            // TODO 
             ProcessStartInfo procStartInfo;
             if (IsLinux)
             {

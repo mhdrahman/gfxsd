@@ -1,6 +1,5 @@
 ﻿const tabs = [
     "Schema",
-    "OutputCSharp",
     "OutputXml",
 ];
 
@@ -28,18 +27,11 @@ async function generateXml(useCodeGen) {
     showSpinner();
     var schema = document.getElementById("schemaTextArea").value;
     var requestUri = window.location.protocol + "//" + window.location.host + "/Home/GenerateXmlFromSchema";
-    if (useCodeGen) {
-        requestUri += "?xmlGenerationMode=1";
-    } else {
-        requestUri += "?xmlGenerationMode=2";
-    }
-
     var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Content: schema }) };
 
     try {
         var response = await fetch(requestUri, request);
         var json = await response.json();
-        document.getElementById("outputCSharpTextArea").value = json.cSharp;
         document.getElementById("outputXmlTextArea").value = json.xml;
         hideSpinner();
         openTab("OutputXml");

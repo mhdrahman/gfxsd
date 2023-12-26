@@ -18,6 +18,7 @@ using System.Xml.Linq;
 namespace GFXSD.Services
 {
     // TODO these three main methods could probably do with being put into three seperate classes
+    // TODO some of these paths should definitely be passed as part of app config
 
     /// <summary>
     /// A class capable of generating sample XML from a given XSD (xml schema).
@@ -27,13 +28,16 @@ namespace GFXSD.Services
         private string DataDirectory;
         private const string XsdToolPath = @"External\xsd.exe";
         private const string Xsd2InstToolPath = @"C:\ProgramData\GFXSD\xmlbeans-5.2.0\bin\xsd2inst.cmd";
+        private bool IsLinux;
 
         /// <summary>
         /// Initialises a new instance of <see cref="XmlGenerationService"./>
         /// </summary>
         public XmlGenerationService()
         {
-            DataDirectory = Environment.OSVersion.Platform == PlatformID.Unix
+            IsLinux = Environment.OSVersion.Platform == PlatformID.Unix;
+
+            DataDirectory = IsLinux
                 ? Path.Combine(Environment.GetEnvironmentVariable("HOME"), "opt", "GFXSD")
                 : "C:/ProgramData/GFXSD";
 
@@ -73,13 +77,27 @@ namespace GFXSD.Services
             schemaXDoc.Save(inputFilePath);
 
             // Use the xsd2inst to generate sample XML from the schema
-            var procStartInfo = new ProcessStartInfo
+            ProcessStartInfo procStartInfo;
+            if (IsLinux)
             {
-                FileName = "cmd.exe",
-                Arguments = $"/C {Xsd2InstToolPath} {inputFilePath} -name MiniFleetNBRq",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-            };
+                procStartInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/C {Xsd2InstToolPath} {inputFilePath} -name MiniFleetNBRq",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                };
+            }
+            else
+            {
+                procStartInfo = new ProcessStartInfo
+                {
+                    FileName = "/bin/bash",
+                    Arguments = $"xsd2inst {inputFilePath} -name MiniFleetNBRq",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                };
+            }
 
             using var proc = Process.Start(procStartInfo);
             var output = proc.StandardOutput.ReadToEnd();

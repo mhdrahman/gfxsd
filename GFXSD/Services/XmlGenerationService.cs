@@ -219,7 +219,11 @@ namespace GFXSD.Services
 
             if (attribute.Name.LocalName.ToLower() == "maxoccurs" && int.TryParse(attribute.Value, out var max) && max > 1)
             {
-                attribute.Parent.Attributes().First(_ => _.Name.LocalName.ToLower() == "minoccurs").Value = "3";
+                var minAttribute = attribute.Parent.Attributes().FirstOrDefault(_ => _.Name.LocalName.ToLower() == "minoccurs");
+                if (minAttribute != null)
+                {
+                    minAttribute.Value = "3";
+                }
             }
         }
     }

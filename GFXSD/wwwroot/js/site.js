@@ -29,6 +29,8 @@ async function generateXml(useCodeGen) {
     var schema = document.getElementById("schemaTextArea").value;
     var requestUri = window.location.protocol + "//" + window.location.host + "/Home/GenerateXmlFromSchema";
     if (useCodeGen) {
+        requestUri += "?xmlGenerationMode=1";
+    } else {
         requestUri += "?xmlGenerationMode=2";
     }
 

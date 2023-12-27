@@ -1,5 +1,6 @@
 ﻿using GFXSD.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -61,19 +62,24 @@ namespace GFXSD.Extensions
             }
         }
 
-        public static void UpdateMinAndMaxOccurs(XAttribute attribute)
+        public static void UpdateMinAndMaxOccurs(this XDocument document)
         {
-            if (attribute.Name.LocalName.ToLower() == "minoccurs")
-            {
-                attribute.Value = "1";
-            }
+            var attributes = document.Descendants().SelectMany(el => el.Attributes().Where(attr => attr.Name.LocalName.ToLower() == "minoccurs" || attr.Name.LocalName.ToLower() == "maxoccurs"));
 
-            if (attribute.Name.LocalName.ToLower() == "maxoccurs" && int.TryParse(attribute.Value, out var max) && max > 1)
+            foreach (var attribute in attributes)
             {
-                var minAttribute = attribute.Parent.Attributes().FirstOrDefault(_ => _.Name.LocalName.ToLower() == "minoccurs");
-                if (minAttribute != null)
+                if (attribute.Name.LocalName.ToLower() == "minoccurs")
                 {
-                    minAttribute.Value = "3";
+                    attribute.Value = "1";
+                }
+
+                if (attribute.Name.LocalName.ToLower() == "maxoccurs" && int.TryParse(attribute.Value, out var max) && max > 1)
+                {
+                    var minAttribute = attribute.Parent.Attributes().FirstOrDefault(_ => _.Name.LocalName.ToLower() == "minoccurs");
+                    if (minAttribute != null)
+                    {
+                        minAttribute.Value = "3";
+                    }
                 }
             }
         }

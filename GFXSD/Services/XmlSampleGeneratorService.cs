@@ -6,8 +6,14 @@ using System.Xml;
 
 namespace GFXSD.Services
 {
+    /// <summary>
+    /// Implementation of <see cref="IXmlGenerationService"/> which uses the
+    /// XmlSampleGenerator dll to generate the sample XML.
+    /// </summary>
+    [Obsolete("Not sure about the licensing for this library. Marked as obsolete until have a concrete answer on it.")]
     public class XmlSampleGeneratorService : IXmlGenerationService
     {
+        /// <inheritdoc/>
         public XmlGenerationResult Generate(string schema)
         {
             // Save the schema to file
@@ -17,11 +23,8 @@ namespace GFXSD.Services
 
             // Use the XmlSampleGenerator from Microsoft to generate the dummy XML on file
             var outputFilePath = Path.Combine(Configuration.DataDirectory, $"{fileName}.xml");
-            using (var textWriter = new XmlTextWriter(outputFilePath, null))
+            using (var textWriter = new XmlTextWriter(outputFilePath, null) { Formatting = Formatting.Indented })
             {
-                textWriter.Formatting = Formatting.Indented;
-                var xmlQualifiedName = new XmlQualifiedName("Root", "http://tempuri.org");
-
                 var generator = new XmlSampleGenerator(inputFilePath, null)
                 {
                     MaxThreshold = 3,

@@ -14,8 +14,14 @@ using System.Text.RegularExpressions;
 
 namespace GFXSD.Services
 {
+    /// <summary>
+    /// Implementation of <see cref="IXmlGenerationService"/> which uses the
+    /// the xsd tool to generated a dll containing a C# class representation of the schema,
+    /// fixture is used to populate the fields of the instance.
+    /// </summary>
     public class FixtureGeneratorService : IXmlGenerationService
     {
+        /// <inheritdoc/>
         public XmlGenerationResult Generate(string schema)
         {
             // Save the schema to file

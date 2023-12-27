@@ -7,12 +7,8 @@
             <button id="SchemaButton" class="tablink" onclick="openTab('Schema')">Schema</button>
             <button id="OutputXmlButton" class="tablink" onclick="openTab('OutputXml')">Output XML</button>
         </div>
-        <div id="Schema" class="tabcontent">
-            <textarea id="schemaTextArea" placeholder="Enter the XML Schema here" spellcheck="false"></textarea>
-        </div>
-        <div id="OutputXml" class="tabcontent">
-            <textarea id="outputXmlTextArea" placeholder="Generated XML will go here" spellcheck="false" readonly></textarea>
-        </div>
+        <div id="Schema" class="tabcontent"></div>
+        <div id="OutputXml" class="tabcontent"></div>
     </div>
     <div class="controlscontainer">
         <button onclick="generateXml(false)" class="controlbtn">Generate XML</button>

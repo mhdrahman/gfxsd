@@ -3,8 +3,13 @@
     "OutputXml",
 ];
 
+var schemaEditor = null;
+var outputEditor = null;
+
 function onLoad() {
     openTab("Schema");
+    schemaEditor = makeEditor("Schema");
+    outputEditor = makeEditor("OutputXml");
 }
 
 function openTab(tabNameToOpen) {
@@ -23,16 +28,25 @@ function openTab(tabNameToOpen) {
     }
 }
 
+function makeEditor(editorName) {
+    var editor = ace.edit(editorName);
+    editor.setTheme("ace/theme/gruvbox");
+    editor.session.setMode("ace/mode/xml");
+    editor.$blockScrolling = Infinity;
+
+    return editor;
+}
+
 async function generateXml(useCodeGen) {
     showSpinner();
-    var schema = document.getElementById("schemaTextArea").value;
+    var schema = schemaEditor.getValue();
     var requestUri = window.location.protocol + "//" + window.location.host + "/Home/GenerateXmlFromSchema";
     var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Content: schema }) };
 
     try {
         var response = await fetch(requestUri, request);
         var json = await response.json();
-        document.getElementById("outputXmlTextArea").value = json.xml;
+        outputEditor.setValue(json.xml);
         hideSpinner();
         openTab("OutputXml");
     } catch (ex) {
@@ -49,14 +63,14 @@ async function cleanXml() {
 }
 
 async function removeNodes(nodeName) {
-    var xml = document.getElementById("outputXmlTextArea").value;
+    var xml = outputEditor.getValue();
     var requestUri = window.location.protocol + "//" + window.location.host + "/Home/RemoveNodes";
     var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ NodeName: nodeName, Xml: xml }) };
 
     try {
         var response = await fetch(requestUri, request);
         var json = await response.json();
-        document.getElementById("outputXmlTextArea").value = json.result;
+        outputEditor.setValue(json.result);
     } catch (ex) {
         handleError(ex);
     }
@@ -77,7 +91,7 @@ function hideSpinner() {
 }
 
 function handleError(ex) {
-    // Probably could show a pretty little modal
+    // TODO: Probably could show a pretty little modal
     alert("Error occured: " + ex);
     hideSpinner();
 }

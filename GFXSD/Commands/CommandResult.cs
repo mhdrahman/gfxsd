@@ -1,4 +1,4 @@
-﻿namespace GFXSD.Models
+﻿namespace GFXSD.Commands
 {
     public class CommandResult
     {

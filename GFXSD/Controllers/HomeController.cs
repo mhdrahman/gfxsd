@@ -1,8 +1,7 @@
-﻿using GFXSD.Extensions;
+﻿using GFXSD.Commands;
 using GFXSD.Models;
 using GFXSD.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using System;
 
@@ -20,7 +19,7 @@ namespace GFXSD.Controllers
             => View();
 
         [HttpPost]
-        public ActionResult GenerateXmlFromSchema([FromBody] Schema schema)
+        public ActionResult GenerateXmlFromSchema([FromBody] XmlSchema schema)
         {
             try
             {
@@ -34,6 +33,6 @@ namespace GFXSD.Controllers
 
         [HttpPost]
         public ActionResult RemoveNodes([FromBody] RemoveNodesCommand command)
-            => Ok(command.Xml.RemoveNodes(command.NodeName));
+            => Ok(command.Execute());
     }
 }

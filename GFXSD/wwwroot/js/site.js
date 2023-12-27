@@ -37,7 +37,7 @@ function makeEditor(editorName) {
     return editor;
 }
 
-async function generateXml(useCodeGen) {
+async function generateXml() {
     showSpinner();
     var schema = schemaEditor.getValue();
     var requestUri = window.location.protocol + "//" + window.location.host + "/Home/GenerateXmlFromSchema";

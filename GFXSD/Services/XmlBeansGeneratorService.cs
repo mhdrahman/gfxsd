@@ -52,6 +52,7 @@ namespace GFXSD.Services
             {
                 Xml = output.RemoveComments(),
                 CSharp = null,
+                Error = error.IsLog4j2Error() ? null : error,
             };
         }
     }

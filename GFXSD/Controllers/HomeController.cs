@@ -25,9 +25,11 @@ namespace GFXSD.Controllers
             {
                 return Ok(_xmlGenerationService.Generate(schema.Content));
             }
+            // TODO Handle the exceptions inside the method, probably want XmlGenerationResult to have multiple
+            // types, each defining how to create it's Http response
             catch (Exception e)
             {
-                return Ok(new XmlGenerationResult { Xml = JsonConvert.SerializeObject(e) });
+                return Ok(new XmlGenerationResult { Error = JsonConvert.SerializeObject(e) });
             }
         }
 

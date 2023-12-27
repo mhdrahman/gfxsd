@@ -51,6 +51,11 @@ async function generateXml() {
         var response = await fetch(requestUri, request);
         var json = await response.json();
         outputEditor.setValue(json.xml);
+
+        if (json.error || json.error != null) {
+            openErrorModal(json.error);
+        }
+
         outputEditor.clearSelection();
         hideSpinner();
         openTab("OutputXml");
@@ -94,6 +99,27 @@ function hideSpinner() {
     spinnerContainer.style.opacity = 0;
     var spinner = document.getElementById("spinner");
     spinner.setAttribute('hidden', '');
+}
+
+function openErrorModal(errorMessage) {
+    showDimmer();
+    var errorModal = document.getElementById("error-modal");
+    errorModal.style.display = "block";
+    document.getElementById("error-modal-content").innerText = errorMessage;
+}
+
+function closeErrorModal() {
+    var errorModal = document.getElementById("error-modal");
+    errorModal.style.display = "none";
+    hideDimmer();
+}
+
+function showDimmer() {
+    document.getElementById("dimmer").style.display = "block";
+}
+
+function hideDimmer() {
+    document.getElementById("dimmer").style.display = "none";
 }
 
 function handleError(ex) {

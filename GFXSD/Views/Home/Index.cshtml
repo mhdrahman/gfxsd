@@ -1,17 +1,23 @@
 ﻿<div id="spinnerContainer">
     <div hidden id="spinner"></div>
 </div>
-<div class="maincontainer">
-    <div class="tabscontainer">
-        <div class="tablinks">
-            <button id="SchemaButton" class="tablink" onclick="openTab('Schema')">Schema</button>
-            <button id="OutputXmlButton" class="tablink" onclick="openTab('OutputXml')">Output XML</button>
-        </div>
-        <div id="Schema" class="tabcontent"></div>
-        <div id="OutputXml" class="tabcontent"></div>
+<div id="navbar" class="navbar">
+    <div>
+        <h1 class="logo">GFXSD</h1>
     </div>
-    <div class="controlscontainer">
-        <button onclick="generateXml()" class="controlbtn">Generate XML</button>
-        <button onclick="cleanXml()" class="controlbtn">Clean XML</button>
+    <div class="navbar-buttons">
+        <button class="navbar-button" onclick="generateXml()">Generate XML</button>
+        <button class="navbar-button" onclick="cleanXml()">Clean XML</button>
+        <button class="navbar-button login-button">Login</button>
+    </div>
+</div>
+<div id="content-container">
+    <div id="editors-container">
+        <div class="tab-links-container">
+            <button id="SchemaButton" class="tab-link" onclick="openTab('Schema')">Schema</button>
+            <button id="OutputXmlButton" class="tab-link" onclick="openTab('OutputXml')">Output XML</button>
+        </div>
+        <div id="Schema" class="editor"></div>
+        <div id="OutputXml" class="editor"></div>
     </div>
 </div>

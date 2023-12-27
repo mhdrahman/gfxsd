@@ -9,14 +9,7 @@
     <link rel="stylesheet" href="~/GFXSD.styles.css" asp-append-version="true" />
 </head>
 <body onload="onLoad()">
-    <div>
-        <main role="main">
-            @RenderBody()
-        </main>
-    </div>
-    <footer class="footer">
-        &copy; @DateTime.Now.Year GFXSD
-    </footer>
+    @RenderBody()
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.js" integrity="sha512-JLIRlxWh96sND3uUgI2RVHZJpgkWHg3+xoUY8XkgTPKpqRaqdk7zD/ck/XHXFSMW84o6GrP67dlqN3b98NB/yA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

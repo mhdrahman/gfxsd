@@ -7,8 +7,7 @@
 body {
     max-width: 100vw;
     max-height: 100vh;
-    background-color: rgb(24, 24, 24);
-    font-family: 'Courier New', Courier, monospace
+    font-family: 'Courier New', Courier, monospace;
 }
 
 button {
@@ -20,20 +19,16 @@ textarea {
     width: 100%;
     padding: 2em;
     font-family: 'Courier New', Courier, monospace;
-    background-color: #282828;
-    color: rgb(0, 255, 255);
     outline: none;
     border: none;
     resize: none;
 }
 
     textarea::placeholder {
-        color: rgb(115, 195, 195);
     }
 
 footer {
     width: 100vw;
-    color: rgb(115, 195, 195);
     text-align: center;
 }
 
@@ -58,8 +53,6 @@ footer {
 }
 
 .tablink {
-    background-color: rgb(61, 61, 61);
-    color: rgb(115, 195, 195);
     padding: 0.5em 2em;
     border: none;
     outline: none;
@@ -73,17 +66,14 @@ footer {
 }
 
 .active {
-    background-color: #282828;
-    color: rgb(0, 255, 255);
 }
 
 .controlbtn {
     padding: 0.5em;
-    color: rgb(0, 255, 255);
     background: none;
     box-shadow: none;
     outline: none;
-    border: 2px solid rgb(0, 255, 255);
+    border: 2px solid;
 }
 
 #spinnerContainer {

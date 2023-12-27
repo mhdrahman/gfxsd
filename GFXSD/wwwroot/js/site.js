@@ -29,9 +29,13 @@ function openTab(tabNameToOpen) {
 }
 
 function makeEditor(editorName) {
-    var editor = ace.edit(editorName);
+    var editor = ace.edit(editorName, {
+        wrap: true,
+    });
+
     editor.setTheme("ace/theme/gruvbox");
     editor.session.setMode("ace/mode/xml");
+    editor.setShowPrintMargin(false);
     editor.$blockScrolling = Infinity;
 
     return editor;
@@ -47,6 +51,7 @@ async function generateXml() {
         var response = await fetch(requestUri, request);
         var json = await response.json();
         outputEditor.setValue(json.xml);
+        outputEditor.clearSelection();
         hideSpinner();
         openTab("OutputXml");
     } catch (ex) {
@@ -71,6 +76,7 @@ async function removeNodes(nodeName) {
         var response = await fetch(requestUri, request);
         var json = await response.json();
         outputEditor.setValue(json.result);
+        outputEditor.clearSelection();
     } catch (ex) {
         handleError(ex);
     }

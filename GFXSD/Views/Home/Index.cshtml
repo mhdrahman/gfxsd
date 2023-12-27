@@ -2,12 +2,14 @@
     <div hidden id="spinner"></div>
 </div>
 <div id="dimmer"></div>
-<div id="error-modal">
-    <div class="error-modal-buttons">
-        <h3>Error occured:</h3>
-        <button class="error-modal-button" onclick="closeErrorModal()">X</button>
+<div id="error-modal-container">
+    <div id="error-modal">
+        <div class="error-modal-buttons">
+            <h3>Error occured</h3>
+            <button class="error-modal-button" onclick="closeErrorModal()"><h3>X</h3></button>
+        </div>
+        <div id="error-modal-content"></div>
     </div>
-    <div id="error-modal-content">Hello, World!</div>
 </div>
 <div id="navbar" class="navbar">
     <div>

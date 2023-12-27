@@ -66,25 +66,24 @@ async function generateXml() {
 }
 
 async function cleanXml() {
-    showSpinner();
-    await removeNodes("FlexibleData");
-    await removeNodes("DynamicData");
-    hideSpinner()
+    try {
+        showSpinner();
+        await removeNodes("FlexibleData");
+        await removeNodes("DynamicData");
+        hideSpinner();
+    } catch (ex) {
+        handleError(ex);
+    }
 }
 
 async function removeNodes(nodeName) {
     var xml = outputEditor.getValue();
     var requestUri = window.location.protocol + "//" + window.location.host + "/Home/RemoveNodes";
     var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ NodeName: nodeName, Xml: xml }) };
-
-    try {
-        var response = await fetch(requestUri, request);
-        var json = await response.json();
-        outputEditor.setValue(json.result);
-        outputEditor.clearSelection();
-    } catch (ex) {
-        handleError(ex);
-    }
+    var response = await fetch(requestUri, request);
+    var json = await response.json();
+    outputEditor.setValue(json.result);
+    outputEditor.clearSelection();
 }
 
 function showSpinner() {
@@ -123,7 +122,6 @@ function hideDimmer() {
 }
 
 function handleError(ex) {
-    // TODO: Probably could show a pretty little modal
-    alert("Error occured: " + ex);
+    openErrorModal(ex);
     hideSpinner();
 }

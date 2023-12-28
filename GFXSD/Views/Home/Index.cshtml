@@ -16,16 +16,16 @@
         <h1 class="logo">GFXSD</h1>
     </div>
     <div class="navbar-buttons">
-        <button class="navbar-button" onclick="generateXml()">Generate XML</button>
-        <button class="navbar-button" onclick="cleanXml()">Clean XML</button>
+        <button id="generate-xml-button" class="navbar-button">Generate XML</button>
+        <button class="navbar-button">Clean XML</button>
         <button class="navbar-button login-button">Login</button>
     </div>
 </div>
 <div id="content-container">
     <div id="editors-container">
         <div class="tab-links-container">
-            <button id="SchemaButton" class="tab-link" onclick="openTab('Schema')">Schema</button>
-            <button id="OutputXmlButton" class="tab-link" onclick="openTab('OutputXml')">Output XML</button>
+            <button id="SchemaButton" class="tab-link">Schema</button>
+            <button id="OutputXmlButton" class="tab-link">Output XML</button>
         </div>
         <div id="Schema" class="editor"></div>
         <div id="OutputXml" class="editor"></div>

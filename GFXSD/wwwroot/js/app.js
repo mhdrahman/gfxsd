@@ -6,6 +6,7 @@ class App {
         this.tabs = [Schema, OutputXml];
         this.schemaEditor = new XmlEditor(this.tabs[0]);
         this.outputEditor = new XmlEditor(this.tabs[1]);
+        this.spinner = new Spinner();
         this.initialize();
     }
 
@@ -34,7 +35,7 @@ class App {
     }
 
     async generateXml() {
-        showSpinner();
+        this.spinner.show();
         var schema = this.schemaEditor.getValue();
         var requestUri = window.location.protocol + "//" + window.location.host + "/Home/GenerateXmlFromSchema";
         var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Content: schema }) };
@@ -49,7 +50,7 @@ class App {
             }
 
             this.outputEditor.clearHighlighting();
-            hideSpinner();
+            this.spinner.hide();
             this.openTab("OutputXml");
         } catch (ex) {
             handleError(ex);
@@ -58,10 +59,10 @@ class App {
 
     async cleanXml() {
         try {
-            showSpinner();
+            this.spinner.show();
             await this.removeNodes("FlexibleData");
             await this.removeNodes("DynamicData");
-            hideSpinner();
+            this.spinner.hide();
         } catch (ex) {
             handleError(ex);
         }
@@ -76,18 +77,4 @@ class App {
         this.outputEditor.setValue(json.result);
         this.outputEditor.clearHighlighting();
     }
-}
-
-function showSpinner() {
-    var spinnerContainer = document.getElementById("spinnerContainer");
-    spinnerContainer.style.opacity = 0.2;
-    var spinner = document.getElementById("spinner");
-    spinner.removeAttribute('hidden');
-}
-
-function hideSpinner() {
-    var spinnerContainer = document.getElementById("spinnerContainer");
-    spinnerContainer.style.opacity = 0;
-    var spinner = document.getElementById("spinner");
-    spinner.setAttribute('hidden', '');
 }

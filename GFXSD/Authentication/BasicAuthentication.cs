@@ -41,7 +41,7 @@ namespace GFXSD.Authentication
             var username = credentials[0];
             var password = credentials[1];
 
-            if (username != "username" || password != "password")
+            if (username != Configuration.Username || password != Configuration.Password)
             {
                 return Task.FromResult(AuthenticateResult.Fail("Incorrect username or password."));
             }

@@ -5,6 +5,7 @@
     }
 
     handleError(error) {
-
+        this.spinner.hide();
+        this.errorModal.open(error);
     }
 }

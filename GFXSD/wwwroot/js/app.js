@@ -6,8 +6,9 @@ class App {
         this.tabs = [Schema, OutputXml];
         this.schemaEditor = new XmlEditor(this.tabs[0]);
         this.outputEditor = new XmlEditor(this.tabs[1]);
+        this.errorModal = new ErrorModal();
         this.spinner = new Spinner();
-        this.errorHandler = new ErrorHandler();
+        this.errorHandler = new ErrorHandler(this.errorModal, this.spinner);
         this.initialize();
     }
 
@@ -47,7 +48,7 @@ class App {
             this.outputEditor.setValue(json.xml);
 
             if (json.error || json.error != null) {
-                openErrorModal(json.error);
+                this.errorModal.open(json.error);
             }
 
             this.outputEditor.clearHighlighting();

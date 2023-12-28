@@ -13,6 +13,7 @@ class App {
         document.getElementById(`${Schema}Button`).addEventListener("click", () => this.openTab(Schema));
         document.getElementById(`${OutputXml}Button`).addEventListener("click", () => this.openTab(OutputXml))
         document.getElementById(`generate-xml-button`).addEventListener("click", () => this.generateXml())
+        document.getElementById(`clean-xml-button`).addEventListener("click", () => this.cleanXml())
         this.openTab("Schema");
     }
 
@@ -53,7 +54,27 @@ class App {
         } catch (ex) {
             handleError(ex);
         }
+    }
 
+    async cleanXml() {
+        try {
+            showSpinner();
+            await this.removeNodes("FlexibleData");
+            await this.removeNodes("DynamicData");
+            hideSpinner();
+        } catch (ex) {
+            handleError(ex);
+        }
+    }
+
+    async removeNodes(nodeName) {
+        var xml = this.outputEditor.getValue();
+        var requestUri = window.location.protocol + "//" + window.location.host + "/Home/RemoveNodes";
+        var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ NodeName: nodeName, Xml: xml }) };
+        var response = await fetch(requestUri, request);
+        var json = await response.json();
+        this.outputEditor.setValue(json.result);
+        this.outputEditor.clearHighlighting();
     }
 }
 

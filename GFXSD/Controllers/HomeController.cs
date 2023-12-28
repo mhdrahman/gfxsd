@@ -1,6 +1,7 @@
 ﻿using GFXSD.Commands;
 using GFXSD.Models;
 using GFXSD.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -19,6 +20,7 @@ namespace GFXSD.Controllers
             => View();
 
         [HttpPost]
+        [Authorize]
         public ActionResult GenerateXmlFromSchema([FromBody] XmlSchema schema)
         {
             try
@@ -34,6 +36,7 @@ namespace GFXSD.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public ActionResult RemoveNodes([FromBody] RemoveNodesCommand command)
             => Ok(command.Execute());
     }

@@ -145,7 +145,7 @@ body {
     z-index: 11;
 }
 
-#error-modal-container {
+.modal-container {
     display: flex;
     position: absolute;
     top: 0;
@@ -157,7 +157,7 @@ body {
     pointer-events: none;
 }
 
-#error-modal {
+.modal-gfxsd {
     display: none;
     position: relative;
     min-width: 50vw;

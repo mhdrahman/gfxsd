@@ -2,13 +2,27 @@
     <div hidden id="spinner"></div>
 </div>
 <div id="dimmer"></div>
-<div id="error-modal-container">
-    <div id="error-modal">
+<div id="error-modal-container" class="modal-container">
+    <div id="error-modal" class="modal-gfxsd">
         <div class="error-modal-buttons">
             <h3>Error occured</h3>
             <button id="error-modal-close-button" class="error-modal-button"><h3>X</h3></button>
         </div>
         <div id="error-modal-content"></div>
+    </div>
+</div>
+<div id="login-modal-container" class="modal-container">
+    <div id="login-modal" class="modal-gfxsd">
+        <div class="error-modal-buttons">
+            <h3>Login</h3>
+            <button id="login-modal-close-button" class="error-modal-button"><h3>X</h3></button>
+        </div>
+        <div id="login-modal-content">
+            <input type="text" id="username"/>
+            <label for="username">Username:</label>
+            <input type="text" id="password"/>
+            <label for="password">Password:</label>
+        </div>
     </div>
 </div>
 <div id="navbar" class="navbar">
@@ -18,7 +32,7 @@
     <div class="navbar-buttons">
         <button id="generate-xml-button" class="navbar-button">Generate XML</button>
         <button id="clean-xml-button" class="navbar-button">Clean XML</button>
-        <button class="navbar-button login-button">Login</button>
+        <button id="login-button" class="navbar-button login-button">Login</button>
     </div>
 </div>
 <div id="content-container">

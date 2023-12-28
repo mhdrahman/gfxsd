@@ -9,6 +9,8 @@ class App {
         this.errorModal = new ErrorModal();
         this.spinner = new Spinner();
         this.errorHandler = new ErrorHandler(this.errorModal, this.spinner);
+        this.loginButton = document.getElementById(`login-button`);
+        this.loginModal = new LoginModal();
         this.initialize();
     }
 
@@ -17,7 +19,27 @@ class App {
         document.getElementById(`${OutputXml}Button`).addEventListener("click", () => this.openTab(OutputXml))
         document.getElementById(`generate-xml-button`).addEventListener("click", () => this.generateXml())
         document.getElementById(`clean-xml-button`).addEventListener("click", () => this.cleanXml())
+        this.loginButton.addEventListener("click", () => this.loginModal.open())
         this.openTab("Schema");
+    }
+
+    async authenticate() {
+        this.spinner.show();
+        var requestUri = window.location.protocol + "//" + window.location.host + "/Authentication/Authenticate";
+        var request = { method: "POST", headers: { "Authorization": "Basic dXNlcm5hbWU6cGFzc3dvcmQ=" } };
+
+        try {
+            var response = await fetch(requestUri, request);
+            if (response.status === 401) {
+                this.errorHandler.handleError("Incorrect username or password.");
+                return;
+            }
+
+            this.loginButton.hidden = true;
+            this.spinner.hide();
+        } catch (ex) {
+            this.errorHandler.handleError(ex);
+        }
     }
 
     openTab(tabNameToOpen) {
@@ -44,6 +66,11 @@ class App {
 
         try {
             var response = await fetch(requestUri, request);
+            if (response.status === 401) {
+                this.handleUnauthorised();
+                return;
+            }
+
             var json = await response.json();
             this.outputEditor.setValue(json.xml);
 
@@ -74,9 +101,20 @@ class App {
         var xml = this.outputEditor.getValue();
         var requestUri = window.location.protocol + "//" + window.location.host + "/Home/RemoveNodes";
         var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ NodeName: nodeName, Xml: xml }) };
+
         var response = await fetch(requestUri, request);
+        if (response.status === 401) {
+            this.handleUnauthorised();
+            return;
+        }
+
         var json = await response.json();
         this.outputEditor.setValue(json.result);
         this.outputEditor.clearHighlighting();
+    }
+
+    handleUnauthorised() {
+        this.errorHandler.handleError("You cannot use this service if you are not logged in.");
+        this.loginButton.hidden = false;
     }
 }

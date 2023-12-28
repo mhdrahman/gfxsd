@@ -26,7 +26,6 @@ namespace GFXSD.Authentication
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            // TODO need to try and authenticate cookie, if fails authenticate whats in the header now and then update the cookie
             if (!Request.Cookies.TryGetValue("token", out var authHeader))
             {
                 authHeader = Request.Headers["Authorization"].ToString();

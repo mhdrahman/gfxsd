@@ -8,8 +8,8 @@ var outputEditor = null;
 
 function onLoad() {
     openTab("Schema");
-    schemaEditor = makeEditor("Schema");
-    outputEditor = makeEditor("OutputXml");
+    schemaEditor = new XmlEditor("Schema");
+    outputEditor = new XmlEditor("OutputXml");
 }
 
 function openTab(tabNameToOpen) {
@@ -28,19 +28,6 @@ function openTab(tabNameToOpen) {
     }
 }
 
-function makeEditor(editorName) {
-    var editor = ace.edit(editorName, {
-        wrap: true,
-    });
-
-    editor.setTheme("ace/theme/gruvbox");
-    editor.session.setMode("ace/mode/xml");
-    editor.setShowPrintMargin(false);
-    editor.$blockScrolling = Infinity;
-
-    return editor;
-}
-
 async function generateXml() {
     showSpinner();
     var schema = schemaEditor.getValue();
@@ -56,7 +43,7 @@ async function generateXml() {
             openErrorModal(json.error);
         }
 
-        outputEditor.clearSelection();
+        outputEditor.clearHighlighting();
         hideSpinner();
         openTab("OutputXml");
     } catch (ex) {
@@ -83,7 +70,7 @@ async function removeNodes(nodeName) {
     var response = await fetch(requestUri, request);
     var json = await response.json();
     outputEditor.setValue(json.result);
-    outputEditor.clearSelection();
+    outputEditor.clearHighlighting();
 }
 
 function showSpinner() {

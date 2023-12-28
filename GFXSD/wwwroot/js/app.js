@@ -28,10 +28,10 @@ class App {
         this.spinner.show();
         var requestUri = window.location.protocol + "//" + window.location.host + "/Authentication/Authenticate";
 
-        // TODO read the form fields
-        var username = "";
-        var password = "";
-        var request = { method: "POST", headers: { "Authorization": "Basic dXNlcm5hbWU6cGFzc3dvcmQ=" } };
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var token = btoa(`${username}:${password}`);
+        var request = { method: "POST", headers: { "Authorization": `Basic ${token}` } };
 
         try {
             var response = await fetch(requestUri, request);

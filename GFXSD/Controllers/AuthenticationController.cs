@@ -12,7 +12,7 @@ namespace GFXSD.Controllers
         public IActionResult Authenticate()
         {
             var token = Request.Headers["Authorization"].ToString();
-            HttpContext.Response.Cookies.Append("token", token, new CookieOptions { Expires = DateTime.Now.AddSeconds(10) });
+            HttpContext.Response.Cookies.Append("token", token, new CookieOptions { Expires = DateTime.Now.AddMinutes(10) });
             return Ok();
         }
     }

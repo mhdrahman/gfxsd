@@ -36,6 +36,7 @@ namespace GFXSD.Authentication
                 return Task.FromResult(AuthenticateResult.NoResult());
             }
 
+            // TODO: request the validator singleton and use it
             var token = authHeader.Substring(6).Trim();
             var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(token)).Split(':');
             var username = credentials[0];

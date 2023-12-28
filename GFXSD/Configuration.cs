@@ -3,15 +3,15 @@ using System.IO;
 
 namespace GFXSD
 {
-    // TODO need to be able to pass the tool paths in via app settings
+    // TODO need to be able to pass the tool paths and username and password in via app settings
     public static class Configuration
     {
+        public const string Username = "username";
+        public const string Password = "password";
+
         public static string DataDirectory;
-
         public static string Terminal;
-
         public static string Xsd2InstToolPath;
-
         public static string XsdToolPath;
 
         static Configuration()

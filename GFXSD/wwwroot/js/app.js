@@ -10,7 +10,7 @@ class App {
         this.spinner = new Spinner();
         this.errorHandler = new ErrorHandler(this.errorModal, this.spinner);
         this.loginButton = document.getElementById(`login-button`);
-        this.loginModal = new LoginModal();
+        this.loginModal = new LoginModal(() => this.authenticate());
         this.initialize();
     }
 
@@ -18,14 +18,19 @@ class App {
         document.getElementById(`${Schema}Button`).addEventListener("click", () => this.openTab(Schema));
         document.getElementById(`${OutputXml}Button`).addEventListener("click", () => this.openTab(OutputXml))
         document.getElementById(`generate-xml-button`).addEventListener("click", () => this.generateXml())
-        document.getElementById(`clean-xml-button`).addEventListener("click", () => this.cleanXml())
-        this.loginButton.addEventListener("click", () => this.loginModal.open())
+        document.getElementById(`clean-xml-button`).addEventListener("click", () => this.cleanXml());
+        this.loginButton.addEventListener("click", () => this.loginModal.open());
         this.openTab("Schema");
     }
 
     async authenticate() {
+        this.loginModal.close();
         this.spinner.show();
         var requestUri = window.location.protocol + "//" + window.location.host + "/Authentication/Authenticate";
+
+        // TODO read the form fields
+        var username = "";
+        var password = "";
         var request = { method: "POST", headers: { "Authorization": "Basic dXNlcm5hbWU6cGFzc3dvcmQ=" } };
 
         try {

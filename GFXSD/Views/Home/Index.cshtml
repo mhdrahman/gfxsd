@@ -4,24 +4,29 @@
 <div id="dimmer"></div>
 <div id="error-modal-container" class="modal-container">
     <div id="error-modal" class="modal-gfxsd">
-        <div class="error-modal-buttons">
+        <div class="modal-buttons">
             <h3>Error occured</h3>
-            <button id="error-modal-close-button" class="error-modal-button"><h3>X</h3></button>
+            <button id="error-modal-close-button" class="modal-button"><h3>X</h3></button>
         </div>
         <div id="error-modal-content"></div>
     </div>
 </div>
 <div id="login-modal-container" class="modal-container">
     <div id="login-modal" class="modal-gfxsd">
-        <div class="error-modal-buttons">
+        <div class="modal-buttons">
             <h3>Login</h3>
-            <button id="login-modal-close-button" class="error-modal-button"><h3>X</h3></button>
+            <button id="login-modal-close-button" class="modal-button"><h3>X</h3></button>
         </div>
-        <div id="login-modal-content">
-            <input type="text" id="username"/>
-            <label for="username">Username:</label>
-            <input type="text" id="password"/>
-            <label for="password">Password:</label>
+        <div id="login-modal-content" class="modal-content">
+            <div class="form-field">
+                <label for="username">Username:</label>
+                <input type="text" id="username"/>
+            </div>
+            <div class="form-field">
+                <label for="password">Password:</label>
+                <input type="text" id="password"/>
+            </div>
+            <button id="login-modal-submit-button">Login</button>
         </div>
     </div>
 </div>

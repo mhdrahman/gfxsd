@@ -171,13 +171,20 @@ body {
     pointer-events: all;
 }
 
-.error-modal-buttons {
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+}
+
+.modal-buttons {
     display: flex;
     justify-content: space-between;
+    border-bottom: 2px solid #2f2f2f;
     width: 100%;
 }
 
-.error-modal-button {
+.modal-button {
     background: none;
     box-shadow: none;
     outline: none;
@@ -186,6 +193,23 @@ body {
     font-size: 2rem;
 }
 
-.error-modal-button:hover {
+.modal-button:hover {
     color: #dcdcdc;
+}
+
+.form-field {
+    display: flex;
+    margin-top: 0.5rem;
+    justify-content: space-between;
+}
+
+.form-field label {
+    margin-right: 0.5rem;
+}
+
+.form-field input {
+}
+
+#login-modal-submit-button {
+    margin-top: 0.5rem;
 }

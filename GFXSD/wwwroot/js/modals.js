@@ -23,15 +23,18 @@
 }
 
 class LoginModal {
-    constructor() {
+    constructor(onSubmit) {
         this.loginModal = document.getElementById("login-modal");
         this.loginModalContent = document.getElementById("login-modal-content");
         this.dimmer = document.getElementById("dimmer");
+        this.submitButton = document.getElementById("login-modal-submit-button");
+        this.onSubmit = onSubmit;
         this.initialize();
     }
 
     initialize() {
         document.getElementById("login-modal-close-button").addEventListener("click", () => this.close());
+        document.getElementById("login-modal-submit-button").addEventListener("click", () => this.onSubmit());
     }
 
     open() {

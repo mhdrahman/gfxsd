@@ -7,6 +7,7 @@ class App {
         this.schemaEditor = new XmlEditor(this.tabs[0]);
         this.outputEditor = new XmlEditor(this.tabs[1]);
         this.spinner = new Spinner();
+        this.errorHandler = new ErrorHandler();
         this.initialize();
     }
 
@@ -51,9 +52,9 @@ class App {
 
             this.outputEditor.clearHighlighting();
             this.spinner.hide();
-            this.openTab("OutputXml");
+            this.openTab(OutputXml);
         } catch (ex) {
-            handleError(ex);
+            this.errorHandler.handleError(ex);
         }
     }
 
@@ -64,7 +65,7 @@ class App {
             await this.removeNodes("DynamicData");
             this.spinner.hide();
         } catch (ex) {
-            handleError(ex);
+            this.errorHandler.handleError(ex);
         }
     }
 

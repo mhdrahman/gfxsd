@@ -1,5 +1,4 @@
 ﻿using GFXSD.Commands;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,35 +30,21 @@ namespace GFXSD.Extensions
             using var stringWriter = new StringWriter();
             using var writer = XmlWriter.Create(stringWriter, xmlSettings);
             xmlserializer.Serialize(writer, value);
-
             return stringWriter.ToString();
-
         }
 
         public static CommandResult RemoveNodes(this string xml, string nodeName)
         {
-            var xElement = XElement.Parse(xml);
-            xElement.Descendants().Where(_ => _.Name == nodeName).Remove();
-
-            return new CommandResult
-            {
-                Result = xElement.ToString(),
-            };
+            var element = XElement.Parse(xml);
+            element.Descendants().Where(_ => _.Name == nodeName).Remove();
+            return new CommandResult { Result = element.ToString() };
         }
 
         public static string RemoveComments(this string xml)
         {
-            try
-            {
-                var xElement = XElement.Parse(xml);
-                xElement.DescendantNodes().OfType<XComment>().Remove();
-
-                return xElement.ToString();
-            }
-            catch (Exception)
-            {
-                return xml;
-            }
+            var element = XElement.Parse(xml);
+            element.DescendantNodes().OfType<XComment>().Remove();
+            return element.ToString();
         }
 
         public static void UpdateMinAndMaxOccurs(this XDocument document)

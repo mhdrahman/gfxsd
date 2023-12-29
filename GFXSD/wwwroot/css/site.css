@@ -5,7 +5,6 @@
 }
 
 body {
-    box-sizing: border-box;
     background-color: #010101;
     overflow: hidden;
 }
@@ -50,8 +49,13 @@ body {
 }
 
 .login-button {
+    background: none;
+    box-shadow: none;
+    outline: none;
+    border: 0px;
     background-color: #47cf73;
     color: black;
+    border-radius: 0.2em;
 }
 
 .login-button:hover {
@@ -204,10 +208,17 @@ body {
 }
 
 .form-field label {
-    margin-right: 0.5rem;
+    margin-right: 1rem;
+    max-width: 25%
 }
 
 .form-field input {
+    width: 75%;
+}
+
+#login-modal {
+    min-width: 30vw;
+    max-width: 60vw;
 }
 
 #login-modal-submit-button {

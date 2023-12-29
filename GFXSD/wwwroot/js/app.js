@@ -24,6 +24,22 @@ class App {
         this.openTab("Schema");
     }
 
+    openTab(tabNameToOpen) {
+        for (var i = 0; i < this.tabs.length; i++) {
+            var tabName = this.tabs[i];
+            var tabContainer = document.getElementById(tabName);
+            var buttonName = tabName + "Button";
+            var button = document.getElementById(buttonName);
+            if (tabName == tabNameToOpen) {
+                tabContainer.style.display = "block";
+                button.classList.add("active");
+            } else {
+                tabContainer.style.display = "none";
+                button.classList.remove("active");
+            }
+        }
+    }
+
     async authenticate() {
         this.loginModal.close();
         this.spinner.show();
@@ -48,22 +64,6 @@ class App {
             this.spinner.hide();
         } catch (ex) {
             this.errorHandler.handleError(ex);
-        }
-    }
-
-    openTab(tabNameToOpen) {
-        for (var i = 0; i < this.tabs.length; i++) {
-            var tabName = this.tabs[i];
-            var tabContainer = document.getElementById(tabName);
-            var buttonName = tabName + "Button";
-            var button = document.getElementById(buttonName);
-            if (tabName == tabNameToOpen) {
-                tabContainer.style.display = "block";
-                button.classList.add("active");
-            } else {
-                tabContainer.style.display = "none";
-                button.classList.remove("active");
-            }
         }
     }
 

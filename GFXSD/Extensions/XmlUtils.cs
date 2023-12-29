@@ -1,4 +1,5 @@
 ﻿using GFXSD.Commands;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,9 +43,16 @@ namespace GFXSD.Extensions
 
         public static string RemoveComments(this string xml)
         {
-            var element = XElement.Parse(xml);
-            element.DescendantNodes().OfType<XComment>().Remove();
-            return element.ToString();
+            try
+            {
+                var element = XElement.Parse(xml);
+                element.DescendantNodes().OfType<XComment>().Remove();
+                return element.ToString();
+            }
+            catch (Exception)
+            {
+                return xml;
+            }
         }
 
         public static void UpdateMinAndMaxOccurs(this XDocument document)

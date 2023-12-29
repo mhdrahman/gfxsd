@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
 
 namespace GFXSD
@@ -6,12 +7,12 @@ namespace GFXSD
     // TODO need to be able to pass the tool paths and username and password in via app settings
     public static class Configuration
     {
-        public const string Username = "username";
-        public const string Password = "password";
+        public static string Username;
+        public static string Password;
 
         public static string DataDirectory;
         public static string Terminal;
-        public static string Xsd2InstToolPath;
+        public static string Xsd2InstCommand;
         public static string XsdToolPath;
 
         static Configuration()
@@ -26,12 +27,23 @@ namespace GFXSD
                 ? "/bin/bash"
                 : "cmd.exe";
 
-            // The /C at the beginning of the windows path is so the process closes after the command finishes running
-            Xsd2InstToolPath = isLinux
-                ? "/home/xmlbeans/xmlbeans-5.2.0/bin/xsd2inst"
-                : @"/C C:\ProgramData\GFXSD\xmlbeans-5.2.0\bin\xsd2inst.cmd";
+            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
 
-            XsdToolPath = @"External\xsd.exe";
+            var authConfig = config.GetSection("Authentication");
+            Username = authConfig.GetValue<string>("Username");
+            Password = authConfig.GetValue<string>("Password");
+
+            var toolConfig = config.GetSection("Tools");
+
+            var xsd2Inst = toolConfig.GetSection("Xsd2Inst");
+            Xsd2InstCommand = isLinux
+                ? xsd2Inst.GetValue<string>("Linux")
+                : xsd2Inst.GetValue<string>("Windows"); 
+
+            var xsd = toolConfig.GetSection("Xsd");
+            XsdToolPath = isLinux
+                ? xsd.GetValue<string>("Linux")
+                : xsd.GetValue<string>("Windows");
 
             Directory.CreateDirectory(DataDirectory);
         }

@@ -40,7 +40,7 @@ namespace GFXSD.Services
                 var xsd2InstProcessStartInfo = new ProcessStartInfo
                 {
                     FileName = Configuration.Terminal,
-                    Arguments = $"{Configuration.Xsd2InstToolPath} {inputFilePath} -name {name}",
+                    Arguments = $"{Configuration.Xsd2InstCommand} {inputFilePath} -name {name}",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                 };

@@ -1,2 +1,2 @@
 * text=auto
-GFXSD/wwwroot/lib linguist-detectable=false
+GFXSD/wwwroot/lib/** linguist-detectable=false

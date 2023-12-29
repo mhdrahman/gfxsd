@@ -19,7 +19,7 @@ namespace GFXSD.Services
     /// the xsd tool to generated a dll containing a C# class representation of the schema,
     /// fixture is used to populate the fields of the instance.
     /// </summary>
-    public class FixtureGeneratorService : IXmlGenerationService
+    public class XmlFixtureGeneratorService : IXmlGenerationService
     {
         /// <inheritdoc/>
         public XmlGenerationResult Generate(string schema)
@@ -40,7 +40,6 @@ namespace GFXSD.Services
             };
 
             using var proc = Process.Start(procStartInfo);
-            var output = proc.StandardOutput.ReadToEnd();
             var err = proc.StandardError.ReadToEnd();
             proc.WaitForExit();
 
@@ -73,7 +72,9 @@ namespace GFXSD.Services
 
             // Load the assembly and create an instance of the generated class
             var matchingTypeName = Regex.Match(generatedCSharp, @"public\s+partial\s+class\s+(\w+)|public\s+class\s+(\w+)");
+#pragma warning disable S3885 // "Assembly.Load" should be used - need to load it from file.
             var loadedAssembly = Assembly.LoadFile(outputDllPath);
+#pragma warning restore S3885 // "Assembly.Load" should be used
             var instance = Activator.CreateInstance(loadedAssembly.GetType(matchingTypeName.Groups[1].Value));
 
             // Populate the instance with dummy data using AutoFixture

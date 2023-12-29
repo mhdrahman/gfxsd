@@ -10,7 +10,9 @@ namespace GFXSD.Services
     /// Implementation of <see cref="IXmlGenerationService"/> which uses the
     /// XmlSampleGenerator dll to generate the sample XML.
     /// </summary>
+#pragma warning disable S1133 // Deprecated code should be removed - Potentially may look into licensing for this and begin using it again.
     [Obsolete("Not sure about the licensing for this library. Marked as obsolete until have a concrete answer on it.")]
+#pragma warning restore S1133 // Deprecated code should be removed
     public class XmlSampleGeneratorService : IXmlGenerationService
     {
         /// <inheritdoc/>

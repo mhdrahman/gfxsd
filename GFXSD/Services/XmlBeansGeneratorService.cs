@@ -33,8 +33,8 @@ namespace GFXSD.Services
                 // and if not passed in - default to trying to find it like so
                 var name = schemaXDoc.Root
                                      .Elements()
-                                     .FirstOrDefault(_ => _.Name.LocalName.ToLower().Contains("element"))
-                                     .Attribute("name").Value;
+                                     .FirstOrDefault(_ => _.Name.LocalName.ToLower().Contains("element"))?
+                                     .Attribute("name")?.Value;
 
                 // Use the xsd2inst to generate sample XML from the schema
                 var xsd2InstProcessStartInfo = new ProcessStartInfo

@@ -6,14 +6,16 @@ namespace GFXSD
 {
     public static class Configuration
     {
-        public static string Username;
-        public static string Password;
-        public static string DataDirectory;
-        public static string Terminal;
-        public static string Xsd2InstCommand;
-        public static string XsdToolPath;
+        public static readonly string Username;
+        public static readonly string Password;
+        public static readonly string DataDirectory;
+        public static readonly string Terminal;
+        public static readonly string Xsd2InstCommand;
+        public static readonly string XsdToolPath;
 
+#pragma warning disable S3963 // "static" fields should be initialized inline - inlining all of these initialisations is an awful idea for readability.
         static Configuration()
+#pragma warning restore S3963 // "static" fields should be initialized inline
         {
             var isLinux = Environment.OSVersion.Platform == PlatformID.Unix;
 

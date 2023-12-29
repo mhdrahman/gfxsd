@@ -32,7 +32,7 @@ namespace GFXSD.Authentication
                 return Task.FromResult(AuthenticateResult.NoResult());
             }
 
-            var token = authHeader.Substring(6).Trim();
+            var token = authHeader[6..].Trim();
             var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(token)).Split(':');
             var username = credentials[0];
             var password = credentials[1];

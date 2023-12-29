@@ -20,7 +20,7 @@ namespace GFXSD.Controllers
         [HttpPost]
         [Authorize]
         public ActionResult GenerateXmlFromSchema([FromBody] XmlSchema schema)
-            => Ok(_xmlGenerationService.Generate(schema.Content));
+            => Ok(_xmlGenerationService.Generate(schema.Content, schema.Root));
 
         [HttpPost]
         [Authorize]

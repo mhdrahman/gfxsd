@@ -11,7 +11,8 @@ namespace GFXSD.Services
         /// Generates sample XML for the given <paramref name="schema"/>.
         /// </summary>
         /// <param name="schema">The schema for which the sample XML should be generated.</param>
+        /// <param name="root">The name of the root element.</param>
         /// <returns>Sample XML for the given <paramref name="schema"/>.</returns>
-        XmlGenerationResult Generate(string schema);
+        XmlGenerationResult Generate(string schema, string root);
     }
 }

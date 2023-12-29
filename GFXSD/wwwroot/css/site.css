@@ -80,6 +80,8 @@ body {
 
 .tab-links-container {
     width: 95vw;
+    display: flex;
+    justify-content: space-between;
 }
 
 .tab-link {
@@ -96,6 +98,14 @@ body {
 
 .active {
     background-color: #1d2021;
+}
+
+#root-element-name {
+    padding: 0.2rem;
+    margin-bottom: 5px;
+    max-width: 50vw;
+    min-width: 296px;
+    border-radius: 0.2rem;
 }
 
 .editor {
@@ -173,6 +183,10 @@ body {
     padding-top: 0.5rem;
     border-radius: 0.5rem;
     pointer-events: all;
+}
+
+#error-modal-content{
+    overflow-wrap: break-word;
 }
 
 .modal-content {

@@ -12,6 +12,7 @@ class App {
         this.authToken = null;
         this.loginModal = new LoginModal(() => this.authenticate());
         this.loginButton = document.getElementById(`login-button`);
+        this.root = document.getElementById("root-element-name");
         this.initialize();
     }
 
@@ -69,11 +70,13 @@ class App {
 
     async generateXml() {
         this.spinner.show();
-
         var schema = this.schemaEditor.getValue();
-
         var requestUri = window.location.protocol + "//" + window.location.host + "/Home/GenerateXmlFromSchema";
-        var request = { method: "POST", headers: { "Content-Type": "application/json", "Authorization": this.token }, body: JSON.stringify({ Content: schema }) };
+        var request = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": this.token },
+            body: JSON.stringify({ Content: schema, Root: this.root.value })
+        };
 
         try {
             var response = await fetch(requestUri, request);
@@ -87,6 +90,8 @@ class App {
 
             this.outputEditor.setValue(json.xml);
             this.outputEditor.clearHighlighting();
+            this.root.value = json.root;
+            console.log(json.root);
             this.spinner.hide();
             this.openTab(OutputXml);
         } catch (ex) {

@@ -17,7 +17,7 @@ namespace GFXSD.Services
     public class XmlSampleGeneratorService : IXmlGenerationService
     {
         /// <inheritdoc/>
-        public XmlGenerationResult Generate(string schema)
+        public XmlGenerationResult Generate(string schema, string root)
         {
             try
             {

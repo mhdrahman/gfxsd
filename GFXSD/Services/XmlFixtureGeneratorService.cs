@@ -22,7 +22,7 @@ namespace GFXSD.Services
     public class XmlFixtureGeneratorService : IXmlGenerationService
     {
         /// <inheritdoc/>
-        public XmlGenerationResult Generate(string schema)
+        public XmlGenerationResult Generate(string schema, string root)
         {
             try
             {

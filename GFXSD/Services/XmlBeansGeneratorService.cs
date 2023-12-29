@@ -15,7 +15,7 @@ namespace GFXSD.Services
     public class XmlBeansGeneratorService : IXmlGenerationService
     {
         /// <inheritdoc/>
-        public XmlGenerationResult Generate(string schema)
+        public XmlGenerationResult Generate(string schema, string root)
         {
             try
             {
@@ -27,13 +27,10 @@ namespace GFXSD.Services
                 var inputFilePath = Path.Combine(Configuration.DataDirectory, $"{fileName}.xsd");
                 schemaXDoc.Save(inputFilePath);
 
-                // TODO: This doeesn't feel very robust - should probably be something you can pass in
-                // and if not passed in - default to trying to find it like so
-                var name = schemaXDoc.Root
-                                     .Elements()
-                                     .FirstOrDefault(_ => _.Name.LocalName.ToLower().Contains("element"))?
-                                     .Attribute("name")?.Value;
-
+                var name = string.IsNullOrEmpty(root)
+                    ? schemaXDoc.Root.Elements().FirstOrDefault(_ => _.Name.LocalName.ToLower().Contains("element"))?.Attribute("name")?.Value
+                    : root; 
+                
                 // Use the xsd2inst to generate sample XML from the schema
                 var xsd2InstProcessStartInfo = new ProcessStartInfo
                 {
@@ -52,8 +49,9 @@ namespace GFXSD.Services
 
                 return new XmlGenerationResult
                 {
-                    Xml = output.RemoveComments(),
+                    Xml = string.IsNullOrEmpty(output) ? null : output.RemoveComments(),
                     Error = error.IsLog4j2Error() ? null : error,
+                    Root = name,
                 };
             }
             catch (Exception exception)

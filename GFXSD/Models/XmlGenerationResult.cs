@@ -6,6 +6,8 @@
 
         public string Xml { get; set; }
 
+        public string Root { get; set; }
+
         public string Error { get; set; }
     }
 }

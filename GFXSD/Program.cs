@@ -19,6 +19,11 @@ namespace GFXSD
                             .AddControllersWithViews()
                             .AddNewtonsoftJson();
 
+            builder.Services.AddWebOptimizer(pipeline =>
+            {
+                pipeline.AddJavaScriptBundle("/js/bundle.js", "js/**/*.js");
+            });
+
             builder.Services.AddAuthentication(BasicAuthentication.SchemeName)
                             .AddScheme<AuthenticationSchemeOptions, BasicAuthentication>(BasicAuthentication.SchemeName, null);
 
@@ -34,6 +39,8 @@ namespace GFXSD
             }
 
             app.UseForwardedHeaders();
+
+            app.UseWebOptimizer();
             app.UseStaticFiles();
 
             app.UseRouting();

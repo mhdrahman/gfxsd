@@ -42,7 +42,6 @@ namespace GFXSD.Services
 
                 using var xsd2InstProcess = Process.Start(xsd2InstProcessStartInfo);
 
-                // TODO: There has to be a better way to do this replace
                 var output = xsd2InstProcess.StandardOutput.ReadToEnd().Replace("XMLBEANS_LIB=/home/xmlbeans/xmlbeans-5.2.0/bin/../lib", string.Empty);
                 var error = xsd2InstProcess.StandardError.ReadToEnd();
                 xsd2InstProcess.WaitForExit();

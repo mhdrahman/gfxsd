@@ -18,29 +18,36 @@ namespace GFXSD.Services
         /// <inheritdoc/>
         public XmlGenerationResult Generate(string schema)
         {
-            // Save the schema to file
-            var fileName = Guid.NewGuid().ToString();
-            var inputFilePath = Path.Combine(Configuration.DataDirectory, $"{fileName}.xsd");
-            File.WriteAllText(inputFilePath, schema);
-
-            // Use the XmlSampleGenerator from Microsoft to generate the dummy XML on file
-            var outputFilePath = Path.Combine(Configuration.DataDirectory, $"{fileName}.xml");
-            using (var textWriter = new XmlTextWriter(outputFilePath, null) { Formatting = Formatting.Indented })
+            try
             {
-                var generator = new XmlSampleGenerator(inputFilePath, null)
+                // Save the schema to file
+                var fileName = Guid.NewGuid().ToString();
+                var inputFilePath = Path.Combine(Configuration.DataDirectory, $"{fileName}.xsd");
+                File.WriteAllText(inputFilePath, schema);
+
+                // Use the XmlSampleGenerator from Microsoft to generate the dummy XML on file
+                var outputFilePath = Path.Combine(Configuration.DataDirectory, $"{fileName}.xml");
+                using (var textWriter = new XmlTextWriter(outputFilePath, null) { Formatting = Formatting.Indented })
                 {
-                    MaxThreshold = 3,
-                    ListLength = 3,
+                    var generator = new XmlSampleGenerator(inputFilePath, null)
+                    {
+                        MaxThreshold = 3,
+                        ListLength = 3,
+                    };
+
+                    generator.WriteXml(textWriter);
+                }
+
+                return new XmlGenerationResult
+                {
+                    Xml = File.ReadAllText(outputFilePath),
+                    CSharp = null,
                 };
-
-                generator.WriteXml(textWriter);
             }
-
-            return new XmlGenerationResult
+            catch (Exception ex)
             {
-                Xml = File.ReadAllText(outputFilePath),
-                CSharp = null,
-            };
+                return ExceptionHandler.Handle(ex);
+            }
         }
     }
 }

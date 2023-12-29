@@ -3,8 +3,6 @@ using GFXSD.Models;
 using GFXSD.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System;
 
 namespace GFXSD.Controllers
 {
@@ -22,18 +20,7 @@ namespace GFXSD.Controllers
         [HttpPost]
         [Authorize]
         public ActionResult GenerateXmlFromSchema([FromBody] XmlSchema schema)
-        {
-            try
-            {
-                return Ok(_xmlGenerationService.Generate(schema.Content));
-            }
-            // TODO Handle the exceptions inside the method, probably want XmlGenerationResult to have multiple
-            // types, each defining how to create it's Http response
-            catch (Exception e)
-            {
-                return Ok(new XmlGenerationResult { Error = JsonConvert.SerializeObject(e) });
-            }
-        }
+            => Ok(_xmlGenerationService.Generate(schema.Content));
 
         [HttpPost]
         [Authorize]

@@ -4,8 +4,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace GFXSD.Services
@@ -47,7 +45,7 @@ namespace GFXSD.Services
 
                 using var xsd2InstProcess = Process.Start(xsd2InstProcessStartInfo);
 
-                // TODO: There has to be a better way to do this
+                // TODO: There has to be a better way to do this replace
                 var output = xsd2InstProcess.StandardOutput.ReadToEnd().Replace("XMLBEANS_LIB=/home/xmlbeans/xmlbeans-5.2.0/bin/../lib", string.Empty);
                 var error = xsd2InstProcess.StandardError.ReadToEnd();
                 xsd2InstProcess.WaitForExit();
@@ -58,12 +56,9 @@ namespace GFXSD.Services
                     Error = error.IsLog4j2Error() ? null : error,
                 };
             }
-            catch (XmlException)
+            catch (Exception exception)
             {
-                return new XmlGenerationResult
-                {
-                    Error = "An error occured while processing the XML. Please check that you have provided a well formed XML schema.",
-                };
+                return ExceptionHandler.Handle(exception);
             }
         }
     }

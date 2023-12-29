@@ -83,12 +83,9 @@ class App {
             }
 
             var json = await response.json();
+            this.handleError(json);
+
             this.outputEditor.setValue(json.xml);
-
-            if (json.error || json.error != null) {
-                this.errorModal.open(json.error);
-            }
-
             this.outputEditor.clearHighlighting();
             this.spinner.hide();
             this.openTab(OutputXml);
@@ -120,6 +117,8 @@ class App {
         }
 
         var json = await response.json();
+        this.handleError(json);
+
         this.outputEditor.setValue(json.result);
         this.outputEditor.clearHighlighting();
     }
@@ -127,5 +126,11 @@ class App {
     handleUnauthorised() {
         this.errorHandler.handleError("You cannot use this service if you are not logged in.");
         this.loginButton.hidden = false;
+    }
+
+    handleError(json) {
+        if (json.error || json.error != null) {
+            this.errorModal.open(json.error);
+        }
     }
 }

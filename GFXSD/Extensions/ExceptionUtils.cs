@@ -13,9 +13,8 @@ namespace GFXSD.Extensions
             => errorMessage.ToLower().Contains(Log4j2ErrorMessage.ToLower());
 
         public static CommandResult HandleExecuteException(Exception exception)
-            => new CommandResult { Error = JsonConvert.SerializeObject(exception) };
-
+            => new() { Error = JsonConvert.SerializeObject(exception) }; 
         public static XmlGenerationResult HandleGenerateException(Exception exception)
-            => new XmlGenerationResult { Error = JsonConvert.SerializeObject(exception) };
+            => new() { Error = JsonConvert.SerializeObject(exception) };
     }
 }

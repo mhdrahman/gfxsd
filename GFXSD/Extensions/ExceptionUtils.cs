@@ -1,4 +1,9 @@
-﻿namespace GFXSD.Extensions
+﻿using GFXSD.Commands;
+using GFXSD.Models;
+using Newtonsoft.Json;
+using System;
+
+namespace GFXSD.Extensions
 {
     public static class ExceptionUtils
     {
@@ -6,5 +11,11 @@
 
         public static bool IsLog4j2Error(this string errorMessage)
             => errorMessage.ToLower().Contains(Log4j2ErrorMessage.ToLower());
+
+        public static CommandResult HandleExecuteException(Exception exception)
+            => new CommandResult { Error = JsonConvert.SerializeObject(exception) };
+
+        public static XmlGenerationResult HandleGenerateException(Exception exception)
+            => new XmlGenerationResult { Error = JsonConvert.SerializeObject(exception) };
     }
 }

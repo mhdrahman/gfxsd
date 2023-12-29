@@ -15,9 +15,9 @@ namespace GFXSD.Commands
             {
                 return Xml.RemoveNodes(NodeName);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return ExceptionHandler.Handle(ex);
+                return ExceptionUtils.HandleExecuteException(exception);
             }
         }
     }

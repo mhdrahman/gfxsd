@@ -1,4 +1,5 @@
-﻿using GFXSD.Models;
+﻿using GFXSD.Extensions;
+using GFXSD.Models;
 using Microsoft.Xml.XMLGen;
 using System;
 using System.IO;
@@ -44,9 +45,9 @@ namespace GFXSD.Services
                     CSharp = null,
                 };
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return ExceptionHandler.Handle(ex);
+                return ExceptionUtils.HandleGenerateException(exception);
             }
         }
     }

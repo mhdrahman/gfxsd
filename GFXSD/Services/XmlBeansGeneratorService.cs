@@ -58,7 +58,7 @@ namespace GFXSD.Services
             }
             catch (Exception exception)
             {
-                return ExceptionHandler.Handle(exception);
+                return ExceptionUtils.HandleGenerateException(exception);
             }
         }
     }

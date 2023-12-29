@@ -89,9 +89,9 @@ namespace GFXSD.Services
                     CSharp = generatedCSharp,
                 };
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return ExceptionHandler.Handle(ex);
+                return ExceptionUtils.HandleGenerateException(exception);
             }
         }
     }

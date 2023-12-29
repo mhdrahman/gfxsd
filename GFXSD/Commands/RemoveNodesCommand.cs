@@ -1,4 +1,5 @@
 ﻿using GFXSD.Extensions;
+using System;
 
 namespace GFXSD.Commands
 {
@@ -9,6 +10,15 @@ namespace GFXSD.Commands
         public string NodeName { get; set; }
 
         public CommandResult Execute()
-            => Xml.RemoveNodes(NodeName);
+        {
+            try
+            {
+                return Xml.RemoveNodes(NodeName);
+            }
+            catch (Exception ex)
+            {
+                return ExceptionHandler.Handle(ex);
+            }
+        }
     }
 }

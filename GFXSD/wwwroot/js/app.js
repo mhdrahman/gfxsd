@@ -9,9 +9,9 @@ class App {
         this.errorModal = new ErrorModal();
         this.spinner = new Spinner();
         this.errorHandler = new ErrorHandler(this.errorModal, this.spinner);
-        this.loginButton = document.getElementById(`login-button`);
-        this.loginModal = new LoginModal(() => this.authenticate());
         this.authToken = null;
+        this.loginModal = new LoginModal(() => this.authenticate());
+        this.loginButton = document.getElementById(`login-button`);
         this.initialize();
     }
 
@@ -27,11 +27,12 @@ class App {
     async authenticate() {
         this.loginModal.close();
         this.spinner.show();
-        var requestUri = window.location.protocol + "//" + window.location.host + "/Authentication/Authenticate";
 
         var username = document.getElementById("username").value;
         var password = document.getElementById("password").value;
         var token = btoa(`${username}:${password}`);
+
+        var requestUri = window.location.protocol + "//" + window.location.host + "/Authentication/Authenticate";
         var request = { method: "POST", headers: { "Authorization": `Basic ${token}` } };
 
         try {
@@ -68,13 +69,11 @@ class App {
 
     async generateXml() {
         this.spinner.show();
+
         var schema = this.schemaEditor.getValue();
+
         var requestUri = window.location.protocol + "//" + window.location.host + "/Home/GenerateXmlFromSchema";
-        var request = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Authorization": this.token },
-            body: JSON.stringify({ Content: schema })
-        };
+        var request = { method: "POST", headers: { "Content-Type": "application/json", "Authorization": this.token }, body: JSON.stringify({ Content: schema }) };
 
         try {
             var response = await fetch(requestUri, request);
@@ -112,11 +111,7 @@ class App {
     async removeNodes(nodeName) {
         var xml = this.outputEditor.getValue();
         var requestUri = window.location.protocol + "//" + window.location.host + "/Home/RemoveNodes";
-        var request = {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Authorization": this.token },
-            body: JSON.stringify({ NodeName: nodeName, Xml: xml })
-        };
+        var request = { method: "POST", headers: { "Content-Type": "application/json", "Authorization": this.token }, body: JSON.stringify({ NodeName: nodeName, Xml: xml }) };
 
         var response = await fetch(requestUri, request);
         if (response.status === 401) {

@@ -13,6 +13,7 @@ namespace GFXSD.Authentication
     {
         public const string SchemeName = "BasicAuthentication";
         public const string AuthenticationType = "Basic";
+        public const string Authorization = "Authorization";
 
         public BasicAuthentication(
             IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -25,7 +26,7 @@ namespace GFXSD.Authentication
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            var authHeader = Request.Headers["Authorization"].ToString();
+            var authHeader = Request.Headers[Authorization].ToString();
             if (authHeader == null || !authHeader.StartsWith(AuthenticationType, StringComparison.OrdinalIgnoreCase))
             {
                 return Task.FromResult(AuthenticateResult.NoResult());

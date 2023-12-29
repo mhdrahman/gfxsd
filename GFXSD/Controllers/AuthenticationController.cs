@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using GFXSD.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GFXSD.Controllers
@@ -8,6 +9,6 @@ namespace GFXSD.Controllers
         [HttpPost]
         [Authorize]
         public IActionResult Authenticate()
-            => Ok(Request.Headers["Authorization"].ToString());
+            => Ok(Request.Headers[BasicAuthentication.Authorization].ToString());
     }
 }

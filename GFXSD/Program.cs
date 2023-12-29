@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 
 namespace GFXSD
 {
-    // TODO bundle and minify JS files
     public static class Program
     {
         public static void Main(string[] args)

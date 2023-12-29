@@ -4,12 +4,10 @@ using System.IO;
 
 namespace GFXSD
 {
-    // TODO need to be able to pass the tool paths and username and password in via app settings
     public static class Configuration
     {
         public static string Username;
         public static string Password;
-
         public static string DataDirectory;
         public static string Terminal;
         public static string Xsd2InstCommand;

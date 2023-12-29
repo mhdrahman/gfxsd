@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -26,17 +25,12 @@ namespace GFXSD.Authentication
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            if (!Request.Cookies.TryGetValue("token", out var authHeader))
-            {
-                authHeader = Request.Headers["Authorization"].ToString();
-            }
-
+            var authHeader = Request.Headers["Authorization"].ToString();
             if (authHeader == null || !authHeader.StartsWith(AuthenticationType, StringComparison.OrdinalIgnoreCase))
             {
                 return Task.FromResult(AuthenticateResult.NoResult());
             }
 
-            // TODO: request the validator singleton and use it
             var token = authHeader.Substring(6).Trim();
             var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(token)).Split(':');
             var username = credentials[0];
@@ -47,10 +41,10 @@ namespace GFXSD.Authentication
                 return Task.FromResult(AuthenticateResult.Fail("Incorrect username or password."));
             }
 
-            // TODO: also extend the expiry time for the cookie
             var claims = new[] { new Claim(ClaimTypes.Name, username), new Claim(ClaimTypes.Role, "User") };
             var claimsIdentity = new ClaimsIdentity(claims, AuthenticationType);
             var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
             return Task.FromResult(AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal, Scheme.Name)));
         }
     }

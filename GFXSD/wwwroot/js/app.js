@@ -11,6 +11,7 @@ class App {
         this.errorHandler = new ErrorHandler(this.errorModal, this.spinner);
         this.loginButton = document.getElementById(`login-button`);
         this.loginModal = new LoginModal(() => this.authenticate());
+        this.authToken = null;
         this.initialize();
     }
 
@@ -40,6 +41,8 @@ class App {
                 return;
             }
 
+            this.token = await response.text();
+
             this.loginButton.hidden = true;
             this.spinner.hide();
         } catch (ex) {
@@ -67,7 +70,11 @@ class App {
         this.spinner.show();
         var schema = this.schemaEditor.getValue();
         var requestUri = window.location.protocol + "//" + window.location.host + "/Home/GenerateXmlFromSchema";
-        var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ Content: schema }) };
+        var request = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": this.token },
+            body: JSON.stringify({ Content: schema })
+        };
 
         try {
             var response = await fetch(requestUri, request);
@@ -105,7 +112,11 @@ class App {
     async removeNodes(nodeName) {
         var xml = this.outputEditor.getValue();
         var requestUri = window.location.protocol + "//" + window.location.host + "/Home/RemoveNodes";
-        var request = { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ NodeName: nodeName, Xml: xml }) };
+        var request = {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": this.token },
+            body: JSON.stringify({ NodeName: nodeName, Xml: xml })
+        };
 
         var response = await fetch(requestUri, request);
         if (response.status === 401) {

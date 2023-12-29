@@ -16,7 +16,6 @@ namespace GFXSD
 
             // Add services to the container.
             builder.Services.AddSingleton<IXmlGenerationService>(_ => new XmlBeansGeneratorService())
-                            .AddSingleton<BasicAuthenticationCredentialValidator>(_ => new BasicAuthenticationCredentialValidator())
                             .AddControllersWithViews()
                             .AddNewtonsoftJson();
 
